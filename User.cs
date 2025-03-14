@@ -78,6 +78,9 @@ namespace LibraryManagementSystem
                 return "Sách này hiện không có sẵn để mượn.";
             }
 
+            DateTime pickupDeadline = DateTime.Now.AddDays(7); // Thời hạn để lấy sách (7 ngày)
+            DateTime systemReturnDeadline = DateTime.Now.AddDays(30); // Thời hạn xác nhận trả trên hệ thống (30 ngày)
+
             BorrowHistory borrow = new BorrowHistory(
                 Guid.NewGuid().ToString(),
                 book,
@@ -95,7 +98,10 @@ namespace LibraryManagementSystem
             // Thông báo sự thay đổi cho Library (Observer pattern)
             Library.Instance.NotifyBookChanged(book);
 
-            return $"Đã mượn thành công: {book.Title}\nNgày hẹn trả: {returnDate.ToString("dd/MM/yyyy")}";
+            string result = $"Đã mượn thành công: {book.Title}\n";
+            //result += $"Vui lòng đến thư viện đúng ngày {pickupDeadline.ToString("dd/MM/yyyy")} để lấy sách.\n";
+
+            return result;
         }
 
         // Method to return a book
@@ -117,7 +123,7 @@ namespace LibraryManagementSystem
                 return "Không tìm thấy thông tin mượn cho sách này.";
             }
 
-            borrow.ReturnDate = DateTime.Now.ToString("dd/MM/yyyy");
+            borrow.ReturnDate = DateTime.Now.ToString();
             borrow.Returned = true;
             book.Available = true;
             book.DueDate = null;
@@ -125,11 +131,10 @@ namespace LibraryManagementSystem
             // Thông báo sự thay đổi cho Library (Observer pattern)
             Library.Instance.NotifyBookChanged(book);
 
-            string result = $"Đã xác nhận trả sách thành công: {book.Title}";
-
             // Tính ngày hạn chót để trả sách (7 ngày từ hôm nay)
-            DateTime returnDeadline = DateTime.Now.AddDays(7);
-            result += $"\nVui lòng mang sách đến thư viện trong vòng 7 ngày (trước ngày {returnDeadline.ToString("dd/MM/yyyy")}).";
+            DateTime physicalReturnDeadline = DateTime.Now.AddDays(7);
+            string result = $"Đã xác nhận trả sách thành công: {book.Title}\n\n";
+            result += $"Vui lòng mang sách đến thư viện trong vòng 7 ngày (trước ngày {physicalReturnDeadline.ToString("dd/MM/yyyy")}).";
 
             return result;
         }

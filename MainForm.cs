@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Globalization;
 using System.Windows.Forms;
 
 namespace LibraryManagementSystem
@@ -978,8 +979,8 @@ namespace LibraryManagementSystem
         private Label lblBookInfo;
         private Label lblBorrowDate;
         private Label lblReturnDate;
-        private ComboBox cmbBorrowDate;
-        private ComboBox cmbReturnDate;
+        private DateTimePicker dtpBorrowDate;
+        private DateTimePicker dtpReturnDate;
         private Button btnBorrow;
         private Button btnCancel;
 
@@ -987,7 +988,6 @@ namespace LibraryManagementSystem
         {
             this.book = book;
             InitializeComponent();
-            InitializeDateComboBoxes();
         }
 
         private void InitializeComponent()
@@ -996,8 +996,8 @@ namespace LibraryManagementSystem
             this.lblBookInfo = new Label();
             this.lblBorrowDate = new Label();
             this.lblReturnDate = new Label();
-            this.cmbBorrowDate = new ComboBox();
-            this.cmbReturnDate = new ComboBox();
+            this.dtpBorrowDate = new DateTimePicker();
+            this.dtpReturnDate = new DateTimePicker();
             this.btnBorrow = new Button();
             this.btnCancel = new Button();
 
@@ -1024,21 +1024,25 @@ namespace LibraryManagementSystem
             this.lblBorrowDate.Location = new Point(20, 100);
             this.lblBorrowDate.Size = new Size(100, 20);
 
-            // cmbBorrowDate
-            this.cmbBorrowDate.DropDownStyle = ComboBoxStyle.DropDownList;
-            this.cmbBorrowDate.Location = new Point(120, 100);
-            this.cmbBorrowDate.Size = new Size(200, 20);
-            this.cmbBorrowDate.SelectedIndexChanged += new EventHandler(this.cmbBorrowDate_SelectedIndexChanged);
+            // dtpBorrowDate
+            this.dtpBorrowDate.Location = new Point(120, 100);
+            this.dtpBorrowDate.Size = new Size(200, 20);
+            this.dtpBorrowDate.Format = DateTimePickerFormat.Short;
+            this.dtpBorrowDate.MinDate = DateTime.Today.AddDays(0);
+            this.dtpBorrowDate.MaxDate = DateTime.Today.AddDays(7);
+            this.dtpBorrowDate.ValueChanged += new EventHandler(this.dtpBorrowDate_ValueChanged);
 
             // lblReturnDate
             this.lblReturnDate.Text = "Ngày trả:";
             this.lblReturnDate.Location = new Point(20, 140);
             this.lblReturnDate.Size = new Size(100, 20);
 
-            // cmbReturnDate
-            this.cmbReturnDate.DropDownStyle = ComboBoxStyle.DropDownList;
-            this.cmbReturnDate.Location = new Point(120, 140);
-            this.cmbReturnDate.Size = new Size(200, 20);
+            // dtpReturnDate
+            this.dtpReturnDate.Location = new Point(120, 140);
+            this.dtpReturnDate.Size = new Size(200, 20);
+            this.dtpReturnDate.Format = DateTimePickerFormat.Short;
+            this.dtpReturnDate.MinDate = DateTime.Today.AddDays(1);
+            this.dtpReturnDate.MaxDate = DateTime.Today.AddDays(30);
 
             // btnBorrow
             this.btnBorrow.Text = "Mượn";
@@ -1056,65 +1060,25 @@ namespace LibraryManagementSystem
             this.Controls.Add(this.lblTitle);
             this.Controls.Add(this.lblBookInfo);
             this.Controls.Add(this.lblBorrowDate);
-            this.Controls.Add(this.cmbBorrowDate);
+            this.Controls.Add(this.dtpBorrowDate);
             this.Controls.Add(this.lblReturnDate);
-            this.Controls.Add(this.cmbReturnDate);
+            this.Controls.Add(this.dtpReturnDate);
             this.Controls.Add(this.btnBorrow);
             this.Controls.Add(this.btnCancel);
         }
 
-        private void InitializeDateComboBoxes()
+        private void dtpBorrowDate_ValueChanged(object sender, EventArgs e)
         {
-            // Tạo danh sách ngày mượn (hôm nay đến 10 ngày sau)
-            DateTime today = DateTime.Now;
-            for (int i = 0; i <= 10; i++)
-            {
-                DateTime date = today.AddDays(i);
-                cmbBorrowDate.Items.Add(date.ToString("dd/MM/yyyy"));
-            }
-            cmbBorrowDate.SelectedIndex = 0;
-
-            // Tạo danh sách ngày trả (hôm nay đến 30 ngày sau)
-            UpdateReturnDates();
-        }
-
-        private void UpdateReturnDates()
-        {
-            cmbReturnDate.Items.Clear();
-
-            if (cmbBorrowDate.SelectedIndex >= 0)
-            {
-                DateTime borrowDate = DateTime.Parse(cmbBorrowDate.SelectedItem.ToString());
-                DateTime today = DateTime.Now;
-
-                for (int i = 1; i <= 30; i++)
-                {
-                    DateTime date = today.AddDays(i);
-                    if (date > borrowDate)
-                    {
-                        cmbReturnDate.Items.Add(date.ToString("dd/MM/yyyy"));
-                    }
-                }
-
-                cmbReturnDate.SelectedIndex = Math.Min(13, cmbReturnDate.Items.Count - 1);
-            }
-        }
-
-        private void cmbBorrowDate_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            UpdateReturnDates();
+            // Update return dates based on borrow date
+            DateTime borrowDate = dtpBorrowDate.Value;
+            dtpReturnDate.MinDate = borrowDate.AddDays(1);
+            dtpReturnDate.Value = borrowDate.AddDays(1);
         }
 
         private void btnBorrow_Click(object sender, EventArgs e)
         {
-            if (cmbBorrowDate.SelectedIndex < 0 || cmbReturnDate.SelectedIndex < 0)
-            {
-                MessageBox.Show("Vui lòng chọn ngày mượn và ngày trả.", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-
-            DateTime borrowDate = DateTime.Parse(cmbBorrowDate.SelectedItem.ToString());
-            DateTime returnDate = DateTime.Parse(cmbReturnDate.SelectedItem.ToString());
+            DateTime borrowDate = dtpBorrowDate.Value;
+            DateTime returnDate = dtpReturnDate.Value;
 
             if (returnDate <= borrowDate)
             {
