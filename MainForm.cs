@@ -1294,13 +1294,8 @@ namespace LibraryManagementSystem
             }
             else
             {
-                // Giả lập đăng nhập thành công với bất kỳ email nào
-                User newUser = new User("1", "Nguyễn Văn A", email, "0123456789", "Hà Nội, Việt Nam");
-                Library.Instance.AddUser(newUser);
-                Library.Instance.CurrentUser = newUser;
-                MessageBox.Show("Đăng nhập thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                this.DialogResult = DialogResult.OK;
-                this.Close();
+                MessageBox.Show("Đăng nhập thất bại! Kiểm tra lại email và mật khẩu.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
             }
         }
 
@@ -1321,7 +1316,7 @@ namespace LibraryManagementSystem
             }
 
             // Tạo người dùng mới
-            User newUser = new User(Guid.NewGuid().ToString(), name, email, phone, address);
+            User newUser = new User(Guid.NewGuid().ToString(), name, email, password, phone, address);
             Library.Instance.AddUser(newUser);
             Library.Instance.CurrentUser = newUser;
 

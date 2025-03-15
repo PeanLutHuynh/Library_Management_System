@@ -108,7 +108,7 @@ namespace LibraryManagementSystem
                     "Hành Trình Về Phương Đông kể về những trải nghiệm của một đoàn khoa học gồm các chuyên gia hàng đầu của Hội Khoa Học Hoàng Gia Anh được cử sang Ấn Độ và Tây Tạng để tìm hiểu về những khả năng siêu nhiên của con người."));
 
                 // Thêm người dùng mẫu
-                AddUser(new User("1", "Nguyễn Văn A", "nguyenvana@example.com", "0123456789", "Hà Nội, Việt Nam"));
+                AddUser(new User("1", "Nguyễn Văn A", "12345678@gmail.com", "12345678", "0123456789", "Hà Nội, Việt Nam"));
             }
         }
 
@@ -171,9 +171,8 @@ namespace LibraryManagementSystem
         {
             foreach (User user in users)
             {
-                if (user.Email == email)
+                if (user.Email == email && user.Password == password)
                 {
-                    // Trong thực tế, cần kiểm tra mật khẩu đã hash
                     return user;
                 }
             }

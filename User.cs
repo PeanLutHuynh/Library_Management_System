@@ -10,6 +10,7 @@ namespace LibraryManagementSystem
         private string id;
         private string name;
         private string email;
+        private string password;
         private string phone;
         private string address;
         private string memberSince;
@@ -32,6 +33,12 @@ namespace LibraryManagementSystem
         {
             get { return email; }
             set { email = value; }
+        }
+
+        public string Password
+        {
+            get { return password; }
+            set { password = value; }
         }
 
         public string Phone
@@ -59,11 +66,12 @@ namespace LibraryManagementSystem
         }
 
         // Constructor
-        public User(string id, string name, string email, string phone, string address)
+        public User(string id, string name, string email, string password, string phone, string address)
         {
             this.id = id;
             this.name = name;
             this.email = email;
+            this.password = password;
             this.phone = phone;
             this.address = address;
             this.memberSince = DateTime.Now.ToString("dd/MM/yyyy");
