@@ -138,6 +138,7 @@ namespace LibraryManagementSystem
 
             // Thông báo sự thay đổi cho Library (Observer pattern)
             Library.Instance.NotifyBookChanged(book);
+            Library.Instance.SaveData();
 
             // Tính ngày hạn chót để trả sách (7 ngày từ hôm nay)
             DateTime physicalReturnDeadline = DateTime.Now.AddDays(7);

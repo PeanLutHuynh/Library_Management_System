@@ -177,8 +177,7 @@ namespace LibraryManagementSystem
             myBooksPanel.Dock = DockStyle.Fill;
             profilePanel.Dock = DockStyle.Fill;
         }
-
-        private void UpdateNavbar()
+        public void UpdateNavbar()
         {
             bool isAuthenticated = Library.Instance.CurrentUser != null;
 
@@ -191,6 +190,8 @@ namespace LibraryManagementSystem
             if (isAuthenticated)
             {
                 lblUserName.Text = $"Xin chào, {Library.Instance.CurrentUser.Name.Split(' ')[Library.Instance.CurrentUser.Name.Split(' ').Length - 1]}";
+                // Hiển thị thông tin người dùng trong phần Hồ sơ
+                profilePanel.UpdateProfileInfo();
             }
         }
 
@@ -246,12 +247,19 @@ namespace LibraryManagementSystem
             ShowPanel(homePanel);
         }
 
+        public void UpdateBookStatus(Book book)
+        {
+            booksPanel.LoadBooks(); // Làm mới danh sách sách
+        }
+
         private void ShowLoginForm()
         {
             LoginForm loginForm = new LoginForm();
             if (loginForm.ShowDialog() == DialogResult.OK)
             {
                 UpdateNavbar();
+                // Hiển thị thông tin người dùng trong phần Hồ sơ
+                profilePanel.UpdateProfileInfo();
             }
         }
 
@@ -307,7 +315,7 @@ namespace LibraryManagementSystem
         {
             popularBooksPanel.Controls.Clear();
 
-            List<Book> popularBooks = Library.Instance.GetMostBorrowedBooks(4);
+            List<Book> popularBooks = Library.Instance.GetMostBorrowedBooks(5);
 
             foreach (Book book in popularBooks)
             {
@@ -350,7 +358,7 @@ namespace LibraryManagementSystem
             this.Controls.Add(this.booksPanel);
         }
 
-        private void LoadBooks()
+        public void LoadBooks()
         {
             booksPanel.Controls.Clear();
 
@@ -360,6 +368,7 @@ namespace LibraryManagementSystem
                 booksPanel.Controls.Add(bookCard);
             }
         }
+
     }
 
     // Panel cho tìm kiếm
@@ -474,6 +483,7 @@ namespace LibraryManagementSystem
             this.Controls.Add(this.lblTitle);
             this.Controls.Add(this.borrowedBooksPanel);
         }
+
 
         public void LoadBorrowedBooks()
         {
@@ -598,7 +608,12 @@ namespace LibraryManagementSystem
 
         private void ProfilePanel_VisibleChanged(object sender, EventArgs e)
         {
-            if (this.Visible && Library.Instance.CurrentUser != null)
+            UpdateProfileInfo();
+        }
+
+        public void UpdateProfileInfo()
+        {
+            if (Library.Instance.CurrentUser != null)
             {
                 User user = Library.Instance.CurrentUser;
                 txtName.Text = user.Name;
@@ -792,10 +807,18 @@ namespace LibraryManagementSystem
                 string message = Library.Instance.CurrentUser.ReturnBook(book);
                 MessageBox.Show(message, "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
+                // Lưu dữ liệu vào hệ thống
+                Library.Instance.SaveData();
+
                 // Refresh the parent panel
                 if (this.Parent is MyBooksPanel)
                 {
                     ((MyBooksPanel)this.Parent).LoadBorrowedBooks();
+                }
+                // Cập nhật danh sách sách
+                if (Application.OpenForms["MainForm"] is MainForm mainForm)
+                {
+                    mainForm.UpdateBookStatus(book);
                 }
             }
         }
@@ -946,10 +969,10 @@ namespace LibraryManagementSystem
                 {
                     // Nếu đăng nhập thành công, tiếp tục mượn sách
                     ShowBorrowDialog();
+
                 }
                 return;
             }
-
             ShowBorrowDialog();
         }
 
@@ -963,6 +986,7 @@ namespace LibraryManagementSystem
                 this.lblStatus.Text = "Trạng thái: Đã mượn";
                 this.lblStatus.ForeColor = Color.Red;
             }
+
         }
 
         private void btnClose_Click(object sender, EventArgs e)
@@ -1291,6 +1315,7 @@ namespace LibraryManagementSystem
                 MessageBox.Show("Đăng nhập thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 this.DialogResult = DialogResult.OK;
                 this.Close();
+
             }
             else
             {
@@ -1312,6 +1337,27 @@ namespace LibraryManagementSystem
                 string.IsNullOrEmpty(address))
             {
                 MessageBox.Show("Vui lòng nhập đầy đủ thông tin.", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            // Kiểm tra email đã tồn tại
+            if (Library.Instance.IsEmailRegistered(email))
+            {
+                MessageBox.Show("Email đã được sử dụng. Vui lòng sử dụng email khác.", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            // Kiểm tra độ dài mật khẩu
+            if (password.Length < 6)
+            {
+                MessageBox.Show("Mật khẩu phải có ít nhất 6 ký tự.", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            // Kiểm tra định dạng email (giả lập)
+            if (!email.Contains("@") || !email.Contains("."))
+            {
+                MessageBox.Show("Email không hợp lệ.", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
