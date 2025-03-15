@@ -12,7 +12,7 @@ namespace LibraryManagementSystem
         private string dueDate;
         private bool returned;
         private string returnDate;
-
+        
         // Properties
         public string Id
         {

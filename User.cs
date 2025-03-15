@@ -144,7 +144,7 @@ namespace LibraryManagementSystem
             DateTime physicalReturnDeadline = DateTime.Now.AddDays(7);
             string result = $"Đã xác nhận trả sách thành công: {book.Title}\n\n";
             result += $"Vui lòng mang sách đến thư viện trong vòng 7 ngày (trước ngày {physicalReturnDeadline.ToString("dd/MM/yyyy")}).";
-
+            
             return result;
         }
     }

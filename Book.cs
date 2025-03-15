@@ -18,7 +18,7 @@ namespace LibraryManagementSystem
         private int borrowCount;
         private string coverImage;
         private DateTime? dueDate;
-
+        
         // Properties
         public string Id
         {

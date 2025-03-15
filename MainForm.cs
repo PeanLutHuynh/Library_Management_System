@@ -29,14 +29,19 @@ namespace LibraryManagementSystem
         private Button btnLogout;
         private Label lblUserName;
 
+        public static class FormManager
+        {
+            public static MainForm MainForm { get; set; }
+        }
+
         public MainForm()
         {
             InitializeComponent();
             InitializePanels();
-
+            // Lưu tham chiếu đến MainForm
+            FormManager.MainForm = this;
             // Đăng ký sự kiện khi người dùng đăng nhập/đăng xuất
             UpdateNavbar();
-
             // Hiển thị trang chủ mặc định
             ShowPanel(homePanel);
         }
@@ -195,7 +200,7 @@ namespace LibraryManagementSystem
             }
         }
 
-        private void ShowPanel(Panel panel)
+        public void ShowPanel(Panel panel)
         {
             contentPanel.Controls.Clear();
             contentPanel.Controls.Add(panel);
@@ -967,9 +972,17 @@ namespace LibraryManagementSystem
                 LoginForm loginForm = new LoginForm();
                 if (loginForm.ShowDialog() == DialogResult.OK)
                 {
+                    // Sử dụng MainForm từ FormManager
+                    if (MainForm.FormManager.MainForm != null)
+                    {
+                        MainForm.FormManager.MainForm.Invoke((MethodInvoker)delegate
+                        {
+                            MainForm.FormManager.MainForm.UpdateNavbar();
+                            MainForm.FormManager.MainForm.Refresh();
+                        });
+                    }
                     // Nếu đăng nhập thành công, tiếp tục mượn sách
                     ShowBorrowDialog();
-
                 }
                 return;
             }

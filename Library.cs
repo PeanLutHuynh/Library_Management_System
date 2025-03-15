@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text.Json.Serialization;
 
 namespace LibraryManagementSystem
@@ -169,9 +168,17 @@ namespace LibraryManagementSystem
 
         public bool IsEmailRegistered(string email)
         {
-            // Kiểm tra xem email đã được đăng ký hay chưa
-            return Users.Any(user => user.Email.Equals(email, StringComparison.OrdinalIgnoreCase));
+            // Duyệt danh sách người dùng và kiểm tra email
+            foreach (User user in Users)
+            {
+                if (user.Email.Equals(email, StringComparison.OrdinalIgnoreCase))
+                {
+                    return true; // Email đã tồn tại
+                }
+            }
+            return false; // Email chưa được đăng ký
         }
+
 
         // Method to find a user
         public User FindUser(string email, string password)
