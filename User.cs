@@ -136,6 +136,10 @@ namespace LibraryManagementSystem
             book.Available = true;
             book.DueDate = null;
 
+            // Remove the returned book from the user's borrowed books list in the JSON file
+            borrowHistory.Remove(borrow);
+            FileManager.Instance.SerializeLibrary(Library.Instance, "library.json");
+
             // Thông báo sự thay đổi cho Library (Observer pattern)
             Library.Instance.NotifyBookChanged(book);
             Library.Instance.SaveData();
