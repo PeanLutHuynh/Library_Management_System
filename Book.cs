@@ -62,6 +62,12 @@ namespace LibraryManagementSystem
             set { pages = value; }
         }
 
+        public int BorrowCount
+        {
+            get { return borrowCount; }
+            set { borrowCount = value; }
+        }
+
         public string Description
         {
             get { return description; }
@@ -72,12 +78,6 @@ namespace LibraryManagementSystem
         {
             get { return available; }
             set { available = value; }
-        }
-
-        public int BorrowCount
-        {
-            get { return borrowCount; }
-            set { borrowCount = value; }
         }
 
         public string CoverImage
@@ -93,7 +93,7 @@ namespace LibraryManagementSystem
         }
 
         // Constructor
-        public Book(string id, string title, string author, int year, string genre, string publisher, int pages, string description)
+        public Book(string id, string title, string author, int year, string genre, string publisher, int pages, int borrowCount, string description)
         {
             this.id = id;
             this.title = title;
@@ -102,17 +102,11 @@ namespace LibraryManagementSystem
             this.genre = genre;
             this.publisher = publisher;
             this.pages = pages;
+            this.borrowCount = borrowCount;
             this.description = description;
             this.available = true;
-            this.borrowCount = 0;
             this.coverImage = null;
             this.dueDate = null;
-        }
-
-        // Method to display book information
-        public string DisplayInfo()
-        {
-            return $"ID: {id}\nTiêu đề: {title}\nTác giả: {author}\nNăm xuất bản: {year}\nThể loại: {genre}\nTrạng thái: {(available ? "Có sẵn" : "Đã mượn")}\nSố lượt mượn: {borrowCount}";
         }
     }
 }

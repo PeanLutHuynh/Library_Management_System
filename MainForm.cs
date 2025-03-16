@@ -113,12 +113,12 @@ namespace LibraryManagementSystem
             this.btnSearch.Click += new System.EventHandler(this.btnSearch_Click);
 
             // btnMyBooks
-            this.btnMyBooks.Text = "Sách của tôi";
+            this.btnMyBooks.Text = "Sách đang mượn";
             this.btnMyBooks.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnMyBooks.FlatAppearance.BorderSize = 0;
             this.btnMyBooks.ForeColor = System.Drawing.Color.White;
             this.btnMyBooks.Location = new System.Drawing.Point(340, 15);
-            this.btnMyBooks.Size = new System.Drawing.Size(100, 30);
+            this.btnMyBooks.Size = new System.Drawing.Size(110, 30);
             this.btnMyBooks.Click += new System.EventHandler(this.btnMyBooks_Click);
 
             // btnLogin
@@ -182,6 +182,7 @@ namespace LibraryManagementSystem
             myBooksPanel.Dock = DockStyle.Fill;
             profilePanel.Dock = DockStyle.Fill;
         }
+
         public void UpdateNavbar()
         {
             bool isAuthenticated = Library.Instance.CurrentUser != null;
@@ -247,14 +248,34 @@ namespace LibraryManagementSystem
 
         private void btnLogout_Click(object sender, EventArgs e)
         {
+            // Cập nhật trạng thái sách trước khi đăng xuất
+            Library.Instance.ResetBookStatus(); // Đặt lại trạng thái tất cả sách về có sẵn
+
+            // Đặt người dùng hiện tại thành null
             Library.Instance.CurrentUser = null;
+            Library.Instance.SaveData();
+
+            // Cập nhật giao diện
             UpdateNavbar();
+            UpdateAllPanels();
             ShowPanel(homePanel);
         }
 
-        public void UpdateBookStatus(Book book)
+        // Thêm phương thức UpdateAllPanels để cập nhật tất cả các panel
+        public void UpdateAllPanels()
         {
-            booksPanel.LoadBooks(); // Làm mới danh sách sách
+            // Cập nhật danh sách sách
+            booksPanel.LoadBooks();
+
+            // Cập nhật danh sách sách phổ biến
+            homePanel.LoadPopularBooks();
+
+            // Cập nhật danh sách sách đã mượn nếu người dùng đã đăng nhập
+            if (Library.Instance.CurrentUser != null)
+            {
+                myBooksPanel.LoadBorrowedBooks();
+                profilePanel.UpdateProfileInfo();
+            }
         }
 
         private void ShowLoginForm()
@@ -263,6 +284,7 @@ namespace LibraryManagementSystem
             if (loginForm.ShowDialog() == DialogResult.OK)
             {
                 UpdateNavbar();
+                UpdateAllPanels();
                 // Hiển thị thông tin người dùng trong phần Hồ sơ
                 profilePanel.UpdateProfileInfo();
             }
@@ -270,6 +292,7 @@ namespace LibraryManagementSystem
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
+            Library.Instance.ResetBookStatus();
             Library.Instance.SaveData();
         }
     }
@@ -316,7 +339,7 @@ namespace LibraryManagementSystem
             this.Controls.Add(this.popularBooksPanel);
         }
 
-        private void LoadPopularBooks()
+        public void LoadPopularBooks()
         {
             popularBooksPanel.Controls.Clear();
 
@@ -457,7 +480,7 @@ namespace LibraryManagementSystem
         }
     }
 
-    // Panel cho sách của tôi
+    // Panel cho sách đang mượn
     public class MyBooksPanel : Panel
     {
         private Label lblTitle;
@@ -474,7 +497,7 @@ namespace LibraryManagementSystem
             this.borrowedBooksPanel = new FlowLayoutPanel();
 
             // lblTitle
-            this.lblTitle.Text = "Sách của tôi";
+            this.lblTitle.Text = "Sách đang mượn";
             this.lblTitle.Font = new Font("Arial", 20, FontStyle.Bold);
             this.lblTitle.Location = new Point(20, 20);
             this.lblTitle.Size = new Size(400, 30);
@@ -488,7 +511,6 @@ namespace LibraryManagementSystem
             this.Controls.Add(this.lblTitle);
             this.Controls.Add(this.borrowedBooksPanel);
         }
-
 
         public void LoadBorrowedBooks()
         {
@@ -511,135 +533,6 @@ namespace LibraryManagementSystem
                     BorrowedBookCard bookCard = new BorrowedBookCard(book);
                     borrowedBooksPanel.Controls.Add(bookCard);
                 }
-            }
-        }
-    }
-
-    // Panel cho hồ sơ người dùng
-    public class ProfilePanel : Panel
-    {
-        private Label lblTitle;
-        private Label lblName;
-        private TextBox txtName;
-        private Label lblEmail;
-        private TextBox txtEmail;
-        private Label lblPhone;
-        private TextBox txtPhone;
-        private Label lblAddress;
-        private TextBox txtAddress;
-        private Button btnSave;
-
-        public ProfilePanel()
-        {
-            InitializeComponent();
-        }
-
-        private void InitializeComponent()
-        {
-            this.lblTitle = new Label();
-            this.lblName = new Label();
-            this.txtName = new TextBox();
-            this.lblEmail = new Label();
-            this.txtEmail = new TextBox();
-            this.lblPhone = new Label();
-            this.txtPhone = new TextBox();
-            this.lblAddress = new Label();
-            this.txtAddress = new TextBox();
-            this.btnSave = new Button();
-
-            // lblTitle
-            this.lblTitle.Text = "Hồ sơ của tôi";
-            this.lblTitle.Font = new Font("Arial", 20, FontStyle.Bold);
-            this.lblTitle.Location = new Point(20, 20);
-            this.lblTitle.Size = new Size(400, 30);
-
-            // lblName
-            this.lblName.Text = "Họ tên:";
-            this.lblName.Location = new Point(20, 70);
-            this.lblName.Size = new Size(100, 20);
-
-            // txtName
-            this.txtName.Location = new Point(120, 70);
-            this.txtName.Size = new Size(300, 20);
-
-            // lblEmail
-            this.lblEmail.Text = "Email:";
-            this.lblEmail.Location = new Point(20, 100);
-            this.lblEmail.Size = new Size(100, 20);
-
-            // txtEmail
-            this.txtEmail.Location = new Point(120, 100);
-            this.txtEmail.Size = new Size(300, 20);
-
-            // lblPhone
-            this.lblPhone.Text = "Số điện thoại:";
-            this.lblPhone.Location = new Point(20, 130);
-            this.lblPhone.Size = new Size(100, 20);
-
-            // txtPhone
-            this.txtPhone.Location = new Point(120, 130);
-            this.txtPhone.Size = new Size(300, 20);
-
-            // lblAddress
-            this.lblAddress.Text = "Địa chỉ:";
-            this.lblAddress.Location = new Point(20, 160);
-            this.lblAddress.Size = new Size(100, 20);
-
-            // txtAddress
-            this.txtAddress.Location = new Point(120, 160);
-            this.txtAddress.Size = new Size(300, 20);
-
-            // btnSave
-            this.btnSave.Text = "Lưu thay đổi";
-            this.btnSave.Location = new Point(120, 200);
-            this.btnSave.Size = new Size(100, 30);
-            this.btnSave.Click += new EventHandler(this.btnSave_Click);
-
-            // ProfilePanel
-            this.Controls.Add(this.lblTitle);
-            this.Controls.Add(this.lblName);
-            this.Controls.Add(this.txtName);
-            this.Controls.Add(this.lblEmail);
-            this.Controls.Add(this.txtEmail);
-            this.Controls.Add(this.lblPhone);
-            this.Controls.Add(this.txtPhone);
-            this.Controls.Add(this.lblAddress);
-            this.Controls.Add(this.txtAddress);
-            this.Controls.Add(this.btnSave);
-
-            // Load user data
-            this.VisibleChanged += new EventHandler(this.ProfilePanel_VisibleChanged);
-        }
-
-        private void ProfilePanel_VisibleChanged(object sender, EventArgs e)
-        {
-            UpdateProfileInfo();
-        }
-
-        public void UpdateProfileInfo()
-        {
-            if (Library.Instance.CurrentUser != null)
-            {
-                User user = Library.Instance.CurrentUser;
-                txtName.Text = user.Name;
-                txtEmail.Text = user.Email;
-                txtPhone.Text = user.Phone;
-                txtAddress.Text = user.Address;
-            }
-        }
-
-        private void btnSave_Click(object sender, EventArgs e)
-        {
-            if (Library.Instance.CurrentUser != null)
-            {
-                User user = Library.Instance.CurrentUser;
-                user.Name = txtName.Text;
-                user.Email = txtEmail.Text;
-                user.Phone = txtPhone.Text;
-                user.Address = txtAddress.Text;
-
-                Library.Instance.SaveData();
-                MessageBox.Show("Thông tin đã được cập nhật thành công.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
     }
@@ -778,7 +671,7 @@ namespace LibraryManagementSystem
             this.lblAuthor.ForeColor = Color.Gray;
 
             // lblDueDate
-            this.lblDueDate.Text = $"Hạn trả: {book.DueDate}";
+            this.lblDueDate.Text = $"Hạn trả: {book.DueDate?.ToString("dd/MM/yyyy")}";
             this.lblDueDate.Location = new Point(120, 50);
             this.lblDueDate.Size = new Size(270, 20);
 
@@ -812,7 +705,7 @@ namespace LibraryManagementSystem
                 string message = Library.Instance.CurrentUser.ReturnBook(book);
                 MessageBox.Show(message, "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                // Lưu dữ liệu vào hệ thống
+                // Save data to the system
                 Library.Instance.SaveData();
 
                 // Refresh the parent panel
@@ -820,10 +713,11 @@ namespace LibraryManagementSystem
                 {
                     ((MyBooksPanel)this.Parent).LoadBorrowedBooks();
                 }
-                // Cập nhật danh sách sách
+
+                // Update the book list
                 if (Application.OpenForms["MainForm"] is MainForm mainForm)
                 {
-                    mainForm.UpdateBookStatus(book);
+                    mainForm.UpdateAllPanels();
                 }
             }
         }
@@ -846,6 +740,7 @@ namespace LibraryManagementSystem
         private Label lblGenre;
         private Label lblPublisher;
         private Label lblPages;
+        private Label lblBorrowCount;
         private Label lblStatus;
         private Label lblDescription;
         private TextBox txtDescription;
@@ -867,6 +762,7 @@ namespace LibraryManagementSystem
             this.lblGenre = new Label();
             this.lblPublisher = new Label();
             this.lblPages = new Label();
+            this.lblBorrowCount = new Label();
             this.lblStatus = new Label();
             this.lblDescription = new Label();
             this.txtDescription = new TextBox();
@@ -917,9 +813,14 @@ namespace LibraryManagementSystem
             this.lblPages.Location = new Point(240, 180);
             this.lblPages.Size = new Size(340, 20);
 
+            // lblBorrowCount
+            this.lblBorrowCount.Text = $"Lượt mượn: {book.BorrowCount}";
+            this.lblBorrowCount.Location = new Point(240, 210);
+            this.lblBorrowCount.Size = new Size(340, 20);
+
             // lblStatus
             this.lblStatus.Text = $"Trạng thái: {(book.Available ? "Có sẵn" : "Đã mượn")}";
-            this.lblStatus.Location = new Point(240, 210);
+            this.lblStatus.Location = new Point(240, 240);
             this.lblStatus.Size = new Size(340, 20);
             this.lblStatus.ForeColor = book.Available ? Color.Green : Color.Red;
 
@@ -957,6 +858,7 @@ namespace LibraryManagementSystem
             this.Controls.Add(this.lblGenre);
             this.Controls.Add(this.lblPublisher);
             this.Controls.Add(this.lblPages);
+            this.Controls.Add(this.lblBorrowCount);
             this.Controls.Add(this.lblStatus);
             this.Controls.Add(this.lblDescription);
             this.Controls.Add(this.txtDescription);
@@ -978,7 +880,7 @@ namespace LibraryManagementSystem
                         MainForm.FormManager.MainForm.Invoke((MethodInvoker)delegate
                         {
                             MainForm.FormManager.MainForm.UpdateNavbar();
-                            MainForm.FormManager.MainForm.Refresh();
+                            MainForm.FormManager.MainForm.UpdateAllPanels();
                         });
                     }
                     // Nếu đăng nhập thành công, tiếp tục mượn sách
@@ -999,7 +901,6 @@ namespace LibraryManagementSystem
                 this.lblStatus.Text = "Trạng thái: Đã mượn";
                 this.lblStatus.ForeColor = Color.Red;
             }
-
         }
 
         private void btnClose_Click(object sender, EventArgs e)
@@ -1109,7 +1010,7 @@ namespace LibraryManagementSystem
             // Update return dates based on borrow date
             DateTime borrowDate = dtpBorrowDate.Value;
             dtpReturnDate.MinDate = borrowDate.AddDays(1);
-            dtpReturnDate.Value = borrowDate.AddDays(1);
+            dtpReturnDate.Value = borrowDate.AddDays(10); // Mặc định 10 ngày
         }
 
         private void btnBorrow_Click(object sender, EventArgs e)
@@ -1127,6 +1028,15 @@ namespace LibraryManagementSystem
 
             MessageBox.Show($"Chúc mừng! {message}\nVui lòng đến thư viện vào ngày {borrowDate.ToString("dd/MM/yyyy")} để nhận sách.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
+            // Cập nhật giao diện
+            if (MainForm.FormManager.MainForm != null)
+            {
+                MainForm.FormManager.MainForm.Invoke((MethodInvoker)delegate
+                {
+                    MainForm.FormManager.MainForm.UpdateAllPanels();
+                });
+            }
+
             this.DialogResult = DialogResult.OK;
             this.Close();
         }
@@ -1138,7 +1048,6 @@ namespace LibraryManagementSystem
         }
     }
 
-    // Form đăng nhập
     public class LoginForm : Form
     {
         private Label lblTitle;
@@ -1325,15 +1234,14 @@ namespace LibraryManagementSystem
             if (user != null)
             {
                 Library.Instance.CurrentUser = user;
+                user.RestoreBorrowedBooks(); // Khôi phục sách đã mượn
                 MessageBox.Show("Đăng nhập thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 this.DialogResult = DialogResult.OK;
                 this.Close();
-
             }
             else
             {
                 MessageBox.Show("Đăng nhập thất bại! Kiểm tra lại email và mật khẩu.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
-
             }
         }
 
@@ -1385,3 +1293,4 @@ namespace LibraryManagementSystem
         }
     }
 }
+
