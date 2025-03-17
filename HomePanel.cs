@@ -55,24 +55,28 @@ namespace LibraryManagementSystem
             this.lblTitle.Font = new Font("Arial", 28, FontStyle.Bold);
             this.lblTitle.ForeColor = Color.White;
             this.lblTitle.TextAlign = ContentAlignment.MiddleCenter;
-            this.lblTitle.Location = new Point(0, 70);
             this.lblTitle.Size = new Size(860, 40);
             this.lblTitle.Dock = DockStyle.None;
+            this.lblTitle.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            this.lblTitle.Location = new Point((this.ClientSize.Width - lblTitle.Width) / 2, 70);
 
             // Subtitle
-            this.lblSubtitle.Text = "Khám phá, mượn và quản lý sách một cách dễ dàng. Thư viện trực tuyến của chúng tôi cung cấp hàng ngàn đầu sách cho bạn.";
-            this.lblSubtitle.Font = new Font("Arial", 12);
+            this.lblSubtitle.Text = "Khám phá, mượn và quản lý sách một cách dễ dàng. Thư viện trực tuyến cung cấp hàng ngàn đầu sách cho bạn.";
+            this.lblSubtitle.Font = new Font("Arial", 12, FontStyle.Bold);
             this.lblSubtitle.ForeColor = Color.White;
             this.lblSubtitle.TextAlign = ContentAlignment.MiddleCenter;
-            this.lblSubtitle.Location = new Point(100, 120);
+            this.lblSubtitle.Location = new Point(135, 120);
             this.lblSubtitle.Size = new Size(660, 40);
             this.lblSubtitle.Dock = DockStyle.None;
+            this.lblSubtitle.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            this.lblSubtitle.Location = new Point((this.ClientSize.Width - lblSubtitle.Width) / 2, 120);
 
             // Buttons Panel
             Panel buttonsPanel = new Panel();
             buttonsPanel.Size = new Size(300, 40);
-            buttonsPanel.Location = new Point(280, 170);
+            buttonsPanel.Location = new Point((this.ClientSize.Width - buttonsPanel.Width + 30) / 2, 170);
             buttonsPanel.BackColor = Color.Transparent;
+            buttonsPanel.Anchor = AnchorStyles.Top;
 
             // View Books Button
             this.btnViewBooks.Text = "Xem Sách";
@@ -90,7 +94,7 @@ namespace LibraryManagementSystem
             this.btnLogin.ForeColor = Color.White;
             this.btnLogin.Font = new Font("Arial", 10, FontStyle.Bold);
             this.btnLogin.Size = new Size(120, 35);
-            this.btnLogin.Location = new Point(130, 0);
+            this.btnLogin.Location = new Point(this.btnViewBooks.Right + 10, 0); // Đặt bên phải btnViewBooks với khoảng cách 10px
             this.btnLogin.FlatStyle = FlatStyle.Flat;
             this.btnLogin.Click += new EventHandler(this.btnLogin_Click);
 
@@ -110,19 +114,23 @@ namespace LibraryManagementSystem
             this.lblPopularTitle.Size = new Size(400, 30);
 
             this.lblPopularSubtitle.Text = "Khám phá những cuốn sách được độc giả yêu thích nhất tại thư viện của chúng tôi.";
-            this.lblPopularSubtitle.Font = new Font("Arial", 10);
+            this.lblPopularSubtitle.Font = new Font("Arial", 10, FontStyle.Bold);
             this.lblPopularSubtitle.ForeColor = Color.Gray;
-            this.lblPopularSubtitle.Location = new Point(20, 300);
+            this.lblPopularSubtitle.Location = new Point(25, 310);
             this.lblPopularSubtitle.Size = new Size(600, 20);
 
             // Popular Books Panel
-            this.popularBooksPanel.Location = new Point(20, 330);
-            this.popularBooksPanel.Size = new Size(860, 250);
+            this.popularBooksPanel.Location = new Point(20, 350);
+            this.popularBooksPanel.Size = new Size(this.ClientSize.Width - 32, 250);
+            this.popularBooksPanel.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             this.popularBooksPanel.AutoScroll = true;
 
             // Features Section
             this.featuresSection.Location = new Point(0, 600);
-            this.featuresSection.Size = new Size(900, 250);
+            this.featuresSection.Size = new Size(this.ClientSize.Width, 250);
+            this.featuresSection.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            this.lblFeaturesTitle.Size = new Size(this.featuresSection.Width, 30);
+            this.lblFeaturesTitle.TextAlign = ContentAlignment.MiddleCenter;
             this.featuresSection.BackColor = Color.FromArgb(243, 244, 246); // Light gray
 
             // Features Title
@@ -195,6 +203,7 @@ namespace LibraryManagementSystem
             {
                 EnhancedBookCard bookCard = new EnhancedBookCard(book);
                 popularBooksPanel.Controls.Add(bookCard);
+                bookCard.Margin = new Padding(30); // Tăng khoảng cách giữa các sách
             }
         }
 
@@ -243,47 +252,47 @@ namespace LibraryManagementSystem
 
             // BookCard
             this.Size = new Size(200, 240);
-            this.BorderStyle = BorderStyle.None;
+            this.BorderStyle = BorderStyle.FixedSingle;
             this.BackColor = Color.White;
             this.Margin = new Padding(10);
 
             // Borrow Count Badge
-            this.lblBorrowCount = new Label();
             this.lblBorrowCount.Text = $"{book.BorrowCount} lượt mượn";
             this.lblBorrowCount.Font = new Font("Arial", 8, FontStyle.Bold);
             this.lblBorrowCount.ForeColor = Color.White;
             this.lblBorrowCount.BackColor = Color.FromArgb(37, 99, 235);
             this.lblBorrowCount.Size = new Size(80, 20);
-            this.lblBorrowCount.Location = new Point(10, 10);
-            this.lblBorrowCount.TextAlign = ContentAlignment.MiddleCenter;
+            this.lblBorrowCount.Location = new Point(this.Width - 90, 5); // Căn góc phải trên
 
             // picCover
-            this.picCover.Size = new Size(180, 150);
-            this.picCover.Location = new Point(10, 10);
+            this.picCover.Size = new Size(180, 140);
+            this.picCover.Location = new Point(10, 30);
             this.picCover.BackColor = Color.LightGray;
             this.picCover.SizeMode = PictureBoxSizeMode.Zoom;
 
             // lblTitle
             this.lblTitle.Text = book.Title;
             this.lblTitle.Font = new Font("Arial", 10, FontStyle.Bold);
-            this.lblTitle.Location = new Point(10, 170);
+            this.lblTitle.Location = new Point(10, 175);
             this.lblTitle.Size = new Size(180, 20);
+            this.lblTitle.TextAlign = ContentAlignment.MiddleCenter;
 
             // lblAuthor
             this.lblAuthor.Text = book.Author;
-            this.lblAuthor.Location = new Point(10, 190);
+            this.lblAuthor.Location = new Point(10, 195);
             this.lblAuthor.Size = new Size(180, 20);
             this.lblAuthor.ForeColor = Color.Gray;
+            this.lblAuthor.TextAlign = ContentAlignment.MiddleCenter;
 
             // lblGenre
             this.lblGenre.Text = book.Genre;
-            this.lblGenre.Location = new Point(10, 210);
+            this.lblGenre.Location = new Point(10, 215);
             this.lblGenre.Size = new Size(90, 20);
             this.lblGenre.ForeColor = Color.Gray;
 
             // lblStatus
             this.lblStatus.Text = book.Available ? "Có sẵn" : "Đã mượn";
-            this.lblStatus.Location = new Point(100, 210);
+            this.lblStatus.Location = new Point(100, 215);
             this.lblStatus.Size = new Size(90, 20);
             this.lblStatus.ForeColor = book.Available ? Color.Green : Color.Red;
             this.lblStatus.TextAlign = ContentAlignment.TopRight;
@@ -295,6 +304,7 @@ namespace LibraryManagementSystem
             this.Controls.Add(this.lblAuthor);
             this.Controls.Add(this.lblGenre);
             this.Controls.Add(this.lblStatus);
+
 
             // Add click event to the entire panel
             this.Click += new EventHandler(this.BookCard_Click);

@@ -144,7 +144,7 @@ namespace LibraryManagementSystem
             this.btnBorrow.FlatStyle = FlatStyle.Flat;
             this.btnBorrow.FlatAppearance.BorderSize = 0;
             this.btnBorrow.Cursor = Cursors.Hand;
-            this.btnBorrow.Enabled = book.Available && Library.Instance.CurrentUser != null;
+            this.btnBorrow.Enabled = book.Available /*&& Library.Instance.CurrentUser != null*/;
             this.btnBorrow.Click += new EventHandler(this.btnBorrow_Click);
 
             // btnClose
@@ -172,15 +172,8 @@ namespace LibraryManagementSystem
 
         private void btnBorrow_Click(object sender, EventArgs e)
         {
-            if (Library.Instance.CurrentUser == null)
+            if (!CheckLogin())
             {
-                MessageBox.Show("Bạn cần đăng nhập để mượn sách.", "Yêu cầu đăng nhập", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-                if (MainForm.FormManager.MainForm != null)
-                {
-                    MainForm.FormManager.MainForm.ShowLoginForm();
-                }
-
                 return;
             }
 
@@ -201,6 +194,41 @@ namespace LibraryManagementSystem
                 // Đóng form chi tiết
                 this.Close();
             }
+        }
+
+        private bool CheckLogin()
+        {
+            if (Library.Instance.CurrentUser == null)
+            {
+                DialogResult result = MessageBox.Show("Bạn cần đăng nhập để mượn sách. Bạn có muốn đăng nhập ngay bây giờ không?",
+                    "Yêu cầu đăng nhập", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+                if (result == DialogResult.Yes)
+                {
+                    // Hiển thị form đăng nhập
+                    LoginForm loginForm = new LoginForm();
+                    if (loginForm.ShowDialog() == DialogResult.OK)
+                    {
+                        // Nếu đăng nhập thành công, tiếp tục mượn sách
+                        return true;
+                    }
+                    else
+                    {
+                        // Nếu không đăng nhập, đóng form mượn sách
+                        this.DialogResult = DialogResult.Cancel;
+                        this.Close();
+                        return false;
+                    }
+                }
+                else
+                {
+                    this.DialogResult = DialogResult.Cancel;
+                    this.Close();
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         private void btnClose_Click(object sender, EventArgs e)

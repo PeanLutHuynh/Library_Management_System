@@ -154,8 +154,7 @@ namespace LibraryManagementSystem
             {
                 Library.Instance.CurrentUser = user;
                 user.RestoreBorrowedBooks();
-                Library.Instance.SaveData();
-
+                //Library.Instance.SaveData();
                 this.DialogResult = DialogResult.OK;
                 this.Close();
             }
@@ -168,7 +167,7 @@ namespace LibraryManagementSystem
         private void lnkRegister_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             RegisterForm registerForm = new RegisterForm();
-            this.Hide();
+            //this.Hide();
 
             if (registerForm.ShowDialog() == DialogResult.OK)
             {

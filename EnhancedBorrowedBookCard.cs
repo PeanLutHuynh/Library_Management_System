@@ -148,7 +148,7 @@ namespace LibraryManagementSystem
 
             // btnReturn
             this.btnReturn.Text = "Trả sách";
-            this.btnReturn.Location = new Point(730, 65);
+            this.btnReturn.Location = new Point(730, 115);
             this.btnReturn.Size = new Size(100, 35);
             this.btnReturn.FlatStyle = FlatStyle.Flat;
             this.btnReturn.Font = new Font("Segoe UI", 10, FontStyle.Bold);
@@ -169,7 +169,7 @@ namespace LibraryManagementSystem
 
             // btnDetails
             this.btnDetails.Text = "Chi tiết";
-            this.btnDetails.Location = new Point(620, 65);
+            this.btnDetails.Location = new Point(620, 115);
             this.btnDetails.Size = new Size(100, 35);
             this.btnDetails.FlatStyle = FlatStyle.Flat;
             this.btnDetails.Font = new Font("Segoe UI", 10, FontStyle.Bold);

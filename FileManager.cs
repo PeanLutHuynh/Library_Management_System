@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text.Json;
 using System.Windows.Forms;
 
@@ -44,7 +45,7 @@ namespace LibraryManagementSystem
                 };
 
                 // Xóa đường dẫn ảnh tuyệt đối trước khi lưu
-                foreach (var book in libraryData.Books)
+                foreach (Book book in libraryData.Books)
                 {
                     // Lưu chỉ tên file thay vì đường dẫn đầy đủ
                     if (!string.IsNullOrEmpty(book.CoverImage))
@@ -71,13 +72,17 @@ namespace LibraryManagementSystem
                 string jsonString = File.ReadAllText(filePath);
 
                 // Tạo một lớp tạm để deserialize dữ liệu
-                var libraryData = JsonSerializer.Deserialize<LibraryData>(jsonString, new JsonSerializerOptions
+                LibraryData libraryData = JsonSerializer.Deserialize<LibraryData>(jsonString, new JsonSerializerOptions
                 {
                     PropertyNameCaseInsensitive = true
                 });
 
                 if (libraryData != null)
                 {
+                    // Cập nhật dữ liệu vào instance hiện tại
+                    Library.Instance.Books = libraryData.Books;
+                    Library.Instance.Users = libraryData.Users;
+
                     // Đặt lại trạng thái của tất cả sách thành true trước
                     foreach (Book book in libraryData.Books)
                     {
@@ -85,47 +90,24 @@ namespace LibraryManagementSystem
                         book.DueDate = null;
                     }
 
-                    // Cập nhật dữ liệu vào instance hiện tại
-                    Library.Instance.Books = libraryData.Books;
-                    Library.Instance.Users = libraryData.Users;
-                    Library.Instance.CurrentUser = libraryData.CurrentUser;
-
                     // Khôi phục mối quan hệ giữa Book trong BorrowHistory và Book trong danh sách Books
-                    if (Library.Instance.Users != null)
+                    if (libraryData.CurrentUser != null)
                     {
-                        foreach (User user in Library.Instance.Users)
+                        // Tìm user có trong danh sách Users thay vì sử dụng trực tiếp CurrentUser từ JSON
+                        User savedUser = null;
+                        foreach (var user in Library.Instance.Users)
                         {
-                            if (user.BorrowHistory != null)
+                            if (user.Email == libraryData.CurrentUser.Email)
                             {
-                                foreach (BorrowHistory borrow in user.BorrowHistory)
-                                {
-                                    if (borrow != null && borrow.Book != null)
-                                    {
-                                        // Tìm sách tương ứng trong danh sách Books
-                                        Book actualBook = Library.Instance.FindBook(borrow.Book.Id);
-                                        if (actualBook != null)
-                                        {
-                                            // Cập nhật tham chiếu Book trong BorrowHistory
-                                            borrow.Book = actualBook;
-
-                                            // Cập nhật trạng thái của sách nếu đang được mượn
-                                            if (!borrow.Returned)
-                                            {
-                                                actualBook.Available = false;
-                                                try
-                                                {
-                                                    actualBook.DueDate = DateTime.Parse(borrow.DueDate, new System.Globalization.CultureInfo("vi-VN"));
-                                                }
-                                                catch
-                                                {
-                                                    // Nếu không parse được ngày, sử dụng ngày mặc định
-                                                    actualBook.DueDate = DateTime.Now.AddDays(7);
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
+                                savedUser = user;
+                                break;
                             }
+                        }
+
+                        if (savedUser != null)
+                        {
+                            Library.Instance.CurrentUser = savedUser;
+                            savedUser.RestoreBorrowedBooks(); // GỌI HÀM Ở ĐÂY
                         }
                     }
                 }

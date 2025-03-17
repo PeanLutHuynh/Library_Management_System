@@ -32,7 +32,7 @@ namespace LibraryManagementSystem
             this.lblSubtitle.Text = "Quản lý sách bạn đang mượn";
             this.lblSubtitle.Font = new Font("Arial", 10);
             this.lblSubtitle.ForeColor = Color.Gray;
-            this.lblSubtitle.Location = new Point(20, 60);
+            this.lblSubtitle.Location = new Point(20, 70);
             this.lblSubtitle.Size = new Size(400, 20);
 
             // borrowedBooksPanel

@@ -186,22 +186,6 @@ namespace LibraryManagementSystem
             return null;
         }
 
-        // Method to get all available books
-        public List<Book> GetAvailableBooks()
-        {
-            List<Book> availableBooks = new List<Book>();
-
-            foreach (Book book in books)
-            {
-                if (book.Available)
-                {
-                    availableBooks.Add(book);
-                }
-            }
-
-            return availableBooks;
-        }
-
         // Method to get borrowed books (only currently borrowed books)
         public List<Book> GetBorrowedBooks()
         {

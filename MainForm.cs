@@ -45,6 +45,7 @@ namespace LibraryManagementSystem
             UpdateNavbar();
             // Hiển thị trang chủ mặc định
             ShowPanel(homePanel);
+            //this.MaximizeBox = false;
         }
 
         private void InitializeComponent()
@@ -197,16 +198,6 @@ namespace LibraryManagementSystem
             this.btnLogin.Size = new System.Drawing.Size(100, 40);
             this.btnLogin.Cursor = Cursors.Hand;
             this.btnLogin.Click += new System.EventHandler(this.btnLogin_Click);
-            // Bo góc cho nút đăng nhập
-            this.btnLogin.Paint += (sender, e) => {
-                var button = sender as Button;
-                var path = new System.Drawing.Drawing2D.GraphicsPath();
-                path.AddArc(0, 0, 20, 20, 180, 90);
-                path.AddArc(button.Width - 20, 0, 20, 20, 270, 90);
-                path.AddArc(button.Width - 20, button.Height - 20, 20, 20, 0, 90);
-                path.AddArc(0, button.Height - 20, 20, 20, 90, 90);
-                button.Region = new Region(path);
-            };
 
             // btnProfile
             this.btnProfile.Text = "Hồ sơ";
@@ -379,7 +370,7 @@ namespace LibraryManagementSystem
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            Library.Instance.ResetBookStatus();
+            //Library.Instance.ResetBookStatus();
             Library.Instance.SaveData();
         }
     }
