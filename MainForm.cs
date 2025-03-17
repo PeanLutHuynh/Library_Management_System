@@ -36,6 +36,8 @@ namespace LibraryManagementSystem
         public MainForm()
         {
             InitializeComponent();
+            // Đảm bảo thư mục tài nguyên tồn tại
+            ResourceManager.EnsureResourceDirectories();
             InitializePanels();
             // Lưu tham chiếu đến MainForm
             FormManager.MainForm = this;
@@ -87,7 +89,7 @@ namespace LibraryManagementSystem
             picLogo.Size = new Size(40, 40);
             picLogo.Location = new Point(20, 15);
             picLogo.BackColor = Color.Transparent;
-            picLogo.Image = null; // Bạn có thể thêm logo ở đây
+            picLogo.Image = Image.FromFile(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", "Images", "book.png")); // Bạn có thể thêm logo ở đây
             picLogo.SizeMode = PictureBoxSizeMode.Zoom;
             this.navbarPanel.Controls.Add(picLogo);
 

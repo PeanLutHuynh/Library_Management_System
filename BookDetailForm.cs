@@ -48,6 +48,12 @@ namespace LibraryManagementSystem
             this.FormBorderStyle = FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
 
+            // Center panel
+            Panel centerPanel = new Panel();
+            centerPanel.Dock = DockStyle.Fill;
+            centerPanel.AutoScroll = true;
+            centerPanel.Padding = new Padding(30);
+
             // picCover
             this.picCover.Size = new Size(220, 300);
             this.picCover.Location = new Point(30, 30);
@@ -63,6 +69,22 @@ namespace LibraryManagementSystem
                 path.AddArc(0, pic.Height - 20, 20, 20, 90, 90);
                 pic.Region = new Region(path);
             };
+
+            // Tải ảnh bìa sách
+            if (!string.IsNullOrEmpty(book.CoverImage) && System.IO.File.Exists(book.CoverImage))
+            {
+                try
+                {
+                    using (var stream = new System.IO.FileStream(book.CoverImage, System.IO.FileMode.Open, System.IO.FileAccess.Read))
+                    {
+                        picCover.Image = Image.FromStream(stream);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Lỗi khi tải ảnh bìa sách: {ex.Message}");
+                }
+            }
 
             // lblTitle
             this.lblTitle.Text = book.Title;
@@ -133,16 +155,6 @@ namespace LibraryManagementSystem
             this.btnBorrow.Cursor = Cursors.Hand;
             this.btnBorrow.Enabled = book.Available && Library.Instance.CurrentUser != null;
             this.btnBorrow.Click += new EventHandler(this.btnBorrow_Click);
-            // Bo góc cho nút mượn sách
-            this.btnBorrow.Paint += (sender, e) => {
-                var button = sender as Button;
-                var path = new System.Drawing.Drawing2D.GraphicsPath();
-                path.AddArc(0, 0, 20, 20, 180, 90);
-                path.AddArc(button.Width - 20, 0, 20, 20, 270, 90);
-                path.AddArc(button.Width - 20, button.Height - 20, 20, 20, 0, 90);
-                path.AddArc(0, button.Height - 20, 20, 20, 90, 90);
-                button.Region = new Region(path);
-            };
 
             // btnClose
             this.btnClose.Text = "Đóng";
@@ -152,16 +164,6 @@ namespace LibraryManagementSystem
             this.btnClose.FlatStyle = FlatStyle.Flat;
             this.btnClose.Cursor = Cursors.Hand;
             this.btnClose.Click += new EventHandler(this.btnClose_Click);
-            // Bo góc cho nút đóng
-            this.btnClose.Paint += (sender, e) => {
-                var button = sender as Button;
-                var path = new System.Drawing.Drawing2D.GraphicsPath();
-                path.AddArc(0, 0, 20, 20, 180, 90);
-                path.AddArc(button.Width - 20, 0, 20, 20, 270, 90);
-                path.AddArc(button.Width - 20, button.Height - 20, 20, 20, 0, 90);
-                path.AddArc(0, button.Height - 20, 20, 20, 90, 90);
-                button.Region = new Region(path);
-            };
 
             // Add controls
             this.Controls.Add(this.picCover);

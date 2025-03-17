@@ -107,16 +107,6 @@ namespace LibraryManagementSystem
             this.btnBorrow.Cursor = Cursors.Hand;
             this.btnBorrow.UseVisualStyleBackColor = true;
             this.btnBorrow.Click += new System.EventHandler(this.btnBorrow_Click);
-            // Bo góc cho nút mượn sách
-            this.btnBorrow.Paint += (sender, e) => {
-                var button = sender as Button;
-                var path = new System.Drawing.Drawing2D.GraphicsPath();
-                path.AddArc(0, 0, 20, 20, 180, 90);
-                path.AddArc(button.Width - 20, 0, 20, 20, 270, 90);
-                path.AddArc(button.Width - 20, button.Height - 20, 20, 20, 0, 90);
-                path.AddArc(0, button.Height - 20, 20, 20, 90, 90);
-                button.Region = new Region(path);
-            };
 
             // btnCancel
             this.btnCancel.Location = new System.Drawing.Point(230, 240);
@@ -128,16 +118,7 @@ namespace LibraryManagementSystem
             this.btnCancel.FlatStyle = FlatStyle.Flat;
             this.btnCancel.Cursor = Cursors.Hand;
             this.btnCancel.UseVisualStyleBackColor = true;
-            // Bo góc cho nút hủy
-            this.btnCancel.Paint += (sender, e) => {
-                var button = sender as Button;
-                var path = new System.Drawing.Drawing2D.GraphicsPath();
-                path.AddArc(0, 0, 20, 20, 180, 90);
-                path.AddArc(button.Width - 20, 0, 20, 20, 270, 90);
-                path.AddArc(button.Width - 20, button.Height - 20, 20, 20, 0, 90);
-                path.AddArc(0, button.Height - 20, 20, 20, 90, 90);
-                button.Region = new Region(path);
-            };
+            this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
 
             // Add controls to form
             this.Controls.Add(this.lblTitle);

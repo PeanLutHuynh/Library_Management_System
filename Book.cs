@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 
 namespace LibraryManagementSystem
 {
@@ -90,6 +91,36 @@ namespace LibraryManagementSystem
         {
             get { return coverImage; }
             set { coverImage = value; }
+        }
+
+        // Phương thức để tải ảnh bìa sách từ thư mục Resources/Images
+        public void LoadCoverImage()
+        {
+            if (string.IsNullOrEmpty(this.coverImage))
+            {
+                // Tìm ảnh trong thư mục Resources/Images
+                string[] possibleExtensions = { ".jpg", ".png", ".jpeg", ".gif" };
+
+                foreach (string ext in possibleExtensions)
+                {
+                    // Đường dẫn tương đối từ thư mục thực thi
+                    string relativePath = Path.Combine("Resources", "Images", $"{this.id}{ext}");
+                    string absolutePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, relativePath);
+
+                    if (File.Exists(absolutePath))
+                    {
+                        this.coverImage = absolutePath;
+                        return;
+                    }
+                }
+
+                // Nếu không tìm thấy ảnh với ID, thử tìm ảnh mặc định
+                string defaultImagePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", "Images", "default.jpg");
+                if (File.Exists(defaultImagePath))
+                {
+                    this.coverImage = defaultImagePath;
+                }
+            }
         }
 
         // Constructor

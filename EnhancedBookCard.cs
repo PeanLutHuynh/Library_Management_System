@@ -47,11 +47,11 @@ namespace LibraryManagementSystem
                     panel.Region = new Region(path);
 
                     // Vẽ đổ bóng
-                    var shadowRect = new Rectangle(0, 0, panel.Width, panel.Height);
-                    using (var brush = new SolidBrush(Color.FromArgb(20, 0, 0, 0)))
-                    {
-                        e.Graphics.FillRoundedRectangle(brush, shadowRect, 10);
-                    }
+                    //var shadowRect = new Rectangle(0, 0, panel.Width, panel.Height);
+                    //using (var brush = new SolidBrush(Color.FromArgb(20, 0, 0, 0)))
+                    //{
+                    //    e.Graphics.FillRoundedRectangle(brush, shadowRect, 10);
+                    //}
 
                     // Vẽ viền
                     using (var pen = new Pen(Color.FromArgb(229, 231, 235), 1))
@@ -96,6 +96,13 @@ namespace LibraryManagementSystem
                 path.AddArc(0, pic.Height - 15, 15, 15, 90, 90);
                 pic.Region = new Region(path);
             };
+
+            // Tải ảnh bìa sách sử dụng ResourceManager
+            Image coverImage = ResourceManager.LoadBookCoverById(book.Id);
+            if (coverImage != null)
+            {
+                picCover.Image = coverImage;
+            }
 
             // lblTitle
             this.lblTitle.Text = book.Title;

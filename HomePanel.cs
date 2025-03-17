@@ -55,7 +55,7 @@ namespace LibraryManagementSystem
             this.lblTitle.Font = new Font("Arial", 28, FontStyle.Bold);
             this.lblTitle.ForeColor = Color.White;
             this.lblTitle.TextAlign = ContentAlignment.MiddleCenter;
-            this.lblTitle.Location = new Point(0, 50);
+            this.lblTitle.Location = new Point(0, 70);
             this.lblTitle.Size = new Size(860, 40);
             this.lblTitle.Dock = DockStyle.None;
 
@@ -64,14 +64,14 @@ namespace LibraryManagementSystem
             this.lblSubtitle.Font = new Font("Arial", 12);
             this.lblSubtitle.ForeColor = Color.White;
             this.lblSubtitle.TextAlign = ContentAlignment.MiddleCenter;
-            this.lblSubtitle.Location = new Point(100, 100);
+            this.lblSubtitle.Location = new Point(100, 120);
             this.lblSubtitle.Size = new Size(660, 40);
             this.lblSubtitle.Dock = DockStyle.None;
 
             // Buttons Panel
             Panel buttonsPanel = new Panel();
             buttonsPanel.Size = new Size(300, 40);
-            buttonsPanel.Location = new Point(280, 150);
+            buttonsPanel.Location = new Point(280, 170);
             buttonsPanel.BackColor = Color.Transparent;
 
             // View Books Button

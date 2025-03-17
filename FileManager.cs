@@ -11,7 +11,7 @@ namespace LibraryManagementSystem
     {
         // Singleton instance
         private static FileManager instance;
-        
+
         // Private constructor (Singleton pattern)
         private FileManager()
         {
@@ -35,13 +35,25 @@ namespace LibraryManagementSystem
         {
             try
             {
+                // Tạo một bản sao của thư viện để tránh lưu đường dẫn tuyệt đối
                 LibraryData libraryData = new LibraryData
                 {
                     Books = library.Books,
                     Users = library.Users,
-                    //CurrentlyBorrowedBooks = library.CurrentUser?.CurrentlyBorrowedBooks ?? new List<BorrowHistory>() // Thêm dòng này
+                    CurrentUser = library.CurrentUser
                 };
-                string jsonString = JsonSerializer.Serialize(library, new JsonSerializerOptions { WriteIndented = true });
+
+                // Xóa đường dẫn ảnh tuyệt đối trước khi lưu
+                foreach (var book in libraryData.Books)
+                {
+                    // Lưu chỉ tên file thay vì đường dẫn đầy đủ
+                    if (!string.IsNullOrEmpty(book.CoverImage))
+                    {
+                        book.CoverImage = Path.GetFileName(book.CoverImage);
+                    }
+                }
+
+                string jsonString = JsonSerializer.Serialize(libraryData, new JsonSerializerOptions { WriteIndented = true });
                 File.WriteAllText(filePath, jsonString);
             }
             catch (Exception ex)
@@ -57,37 +69,71 @@ namespace LibraryManagementSystem
             try
             {
                 string jsonString = File.ReadAllText(filePath);
+
                 // Tạo một lớp tạm để deserialize dữ liệu
-                LibraryData libraryData = JsonSerializer.Deserialize<LibraryData>(jsonString, new JsonSerializerOptions
+                var libraryData = JsonSerializer.Deserialize<LibraryData>(jsonString, new JsonSerializerOptions
                 {
                     PropertyNameCaseInsensitive = true
                 });
 
                 if (libraryData != null)
                 {
+                    // Đặt lại trạng thái của tất cả sách thành true trước
+                    foreach (Book book in libraryData.Books)
+                    {
+                        book.Available = true;
+                        book.DueDate = null;
+                    }
+
                     // Cập nhật dữ liệu vào instance hiện tại
                     Library.Instance.Books = libraryData.Books;
                     Library.Instance.Users = libraryData.Users;
+                    Library.Instance.CurrentUser = libraryData.CurrentUser;
 
-                    if (libraryData.CurrentUser != null)
+                    // Khôi phục mối quan hệ giữa Book trong BorrowHistory và Book trong danh sách Books
+                    if (Library.Instance.Users != null)
                     {
-                        // Tìm user có trong danh sách Users thay vì sử dụng trực tiếp CurrentUser từ JSON
-                        User savedUser = null;
-                        foreach (var user in Library.Instance.Users)
+                        foreach (User user in Library.Instance.Users)
                         {
-                            if (user.Email == libraryData.CurrentUser.Email)
+                            if (user.BorrowHistory != null)
                             {
-                                savedUser = user;
-                                break;
+                                foreach (BorrowHistory borrow in user.BorrowHistory)
+                                {
+                                    if (borrow != null && borrow.Book != null)
+                                    {
+                                        // Tìm sách tương ứng trong danh sách Books
+                                        Book actualBook = Library.Instance.FindBook(borrow.Book.Id);
+                                        if (actualBook != null)
+                                        {
+                                            // Cập nhật tham chiếu Book trong BorrowHistory
+                                            borrow.Book = actualBook;
+
+                                            // Cập nhật trạng thái của sách nếu đang được mượn
+                                            if (!borrow.Returned)
+                                            {
+                                                actualBook.Available = false;
+                                                try
+                                                {
+                                                    actualBook.DueDate = DateTime.Parse(borrow.DueDate, new System.Globalization.CultureInfo("vi-VN"));
+                                                }
+                                                catch
+                                                {
+                                                    // Nếu không parse được ngày, sử dụng ngày mặc định
+                                                    actualBook.DueDate = DateTime.Now.AddDays(7);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
                             }
                         }
-
-                        if (savedUser != null)
-                        {
-                            Library.Instance.CurrentUser = savedUser;
-                            savedUser.RestoreBorrowedBooks(); // GỌI HÀM Ở ĐÂY
-                        }
                     }
+                }
+
+                // Tải ảnh bìa sách cho tất cả sách
+                foreach (var book in Library.Instance.Books)
+                {
+                    book.LoadCoverImage();
                 }
             }
             catch (Exception ex)
@@ -95,6 +141,7 @@ namespace LibraryManagementSystem
                 MessageBox.Show($"Lỗi khi đọc dữ liệu: {ex.Message}", "Lỗi",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+
             return Library.Instance;
         }
 
@@ -105,8 +152,7 @@ namespace LibraryManagementSystem
             public List<Book> Books { get; set; }
             public List<User> Users { get; set; }
             public User CurrentUser { get; set; }
-            public List<BorrowHistory> CurrentlyBorrowedBooks { get; set; }
         }
-
     }
 }
+
