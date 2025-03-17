@@ -76,6 +76,8 @@ namespace LibraryManagementSystem
             this.dtpBorrowDate.TabIndex = 0;
             this.dtpBorrowDate.Value = DateTime.Now;
             this.dtpBorrowDate.Format = DateTimePickerFormat.Short;
+            this.dtpBorrowDate.MinDate = DateTime.Now;
+            this.dtpBorrowDate.MaxDate = DateTime.Now.AddDays(7);
 
             // lblReturnDate
             this.lblReturnDate = new Label();
@@ -90,8 +92,10 @@ namespace LibraryManagementSystem
             this.dtpReturnDate.Size = new System.Drawing.Size(220, 25);
             this.dtpReturnDate.Font = new System.Drawing.Font("Segoe UI", 10);
             this.dtpReturnDate.TabIndex = 1;
-            this.dtpReturnDate.Value = DateTime.Now.AddDays(7);
+            this.dtpReturnDate.Value = DateTime.Now.AddDays(1);
             this.dtpReturnDate.Format = DateTimePickerFormat.Short;
+            this.dtpReturnDate.MinDate = DateTime.Now.AddDays(1);
+            this.dtpReturnDate.MaxDate = DateTime.Now.AddDays(30);
 
             // btnBorrow
             this.btnBorrow.Location = new System.Drawing.Point(100, 240);

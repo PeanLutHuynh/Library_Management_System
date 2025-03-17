@@ -70,20 +70,11 @@ namespace LibraryManagementSystem
                 pic.Region = new Region(path);
             };
 
-            // Tải ảnh bìa sách
-            if (!string.IsNullOrEmpty(book.CoverImage) && System.IO.File.Exists(book.CoverImage))
+            // Tải ảnh bìa sách sử dụng ResourceManager
+            Image coverImage = ResourceManager.LoadBookCoverById(book.Id);
+            if (coverImage != null)
             {
-                try
-                {
-                    using (var stream = new System.IO.FileStream(book.CoverImage, System.IO.FileMode.Open, System.IO.FileAccess.Read))
-                    {
-                        picCover.Image = Image.FromStream(stream);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"Lỗi khi tải ảnh bìa sách: {ex.Message}");
-                }
+                picCover.Image = coverImage;
             }
 
             // lblTitle

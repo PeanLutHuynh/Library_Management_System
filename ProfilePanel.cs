@@ -307,6 +307,13 @@ namespace LibraryManagementSystem
             this.picCover.BackColor = Color.LightGray;
             this.picCover.SizeMode = PictureBoxSizeMode.Zoom;
 
+            // Tải ảnh bìa sách sử dụng ResourceManager
+            Image coverImage = ResourceManager.LoadBookCoverById(borrowHistory.Book.Id);
+            if (coverImage != null)
+            {
+                picCover.Image = coverImage;
+            }
+
             // lblTitle
             this.lblTitle.Text = borrowHistory.Book.Title;
             this.lblTitle.Font = new Font("Arial", 12, FontStyle.Bold);

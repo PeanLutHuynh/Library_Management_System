@@ -78,6 +78,13 @@ namespace LibraryManagementSystem
                 pic.Region = new Region(path);
             };
 
+            // Tải ảnh bìa sách sử dụng ResourceManager
+            Image coverImage = ResourceManager.LoadBookCoverById(book.Id);
+            if (coverImage != null)
+            {
+                picCover.Image = coverImage;
+            }
+
             // lblTitle
             this.lblTitle.Text = book.Title;
             this.lblTitle.Font = new Font("Segoe UI", 14, FontStyle.Bold);
