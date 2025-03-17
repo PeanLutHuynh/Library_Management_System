@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Globalization;
 using System.Windows.Forms;
 
 namespace LibraryManagementSystem
@@ -28,6 +26,7 @@ namespace LibraryManagementSystem
         private Button btnProfile;
         private Button btnLogout;
         private Label lblUserName;
+        private PictureBox picLogo;
 
         public static class FormManager
         {
@@ -52,6 +51,7 @@ namespace LibraryManagementSystem
             this.navbarPanel = new System.Windows.Forms.Panel();
             this.contentPanel = new System.Windows.Forms.Panel();
 
+            this.picLogo = new System.Windows.Forms.PictureBox();
             this.btnHome = new System.Windows.Forms.Button();
             this.btnBooks = new System.Windows.Forms.Button();
             this.btnSearch = new System.Windows.Forms.Button();
@@ -67,11 +67,40 @@ namespace LibraryManagementSystem
             this.mainPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.mainPanel.Controls.Add(this.navbarPanel);
             this.mainPanel.Controls.Add(this.contentPanel);
+            this.mainPanel.Padding = new Padding(10);
 
             // navbarPanel
             this.navbarPanel.Dock = System.Windows.Forms.DockStyle.Top;
-            this.navbarPanel.Height = 60;
-            this.navbarPanel.BackColor = System.Drawing.Color.FromArgb(37, 99, 235);
+            this.navbarPanel.Height = 70;
+            this.navbarPanel.BackColor = System.Drawing.Color.White;
+            this.navbarPanel.BorderStyle = BorderStyle.None;
+            this.navbarPanel.Padding = new Padding(10);
+            // Thêm đường viền dưới cho navbar
+            this.navbarPanel.Paint += (sender, e) => {
+                var panel = sender as Panel;
+                var pen = new Pen(Color.FromArgb(229, 231, 235), 1);
+                e.Graphics.DrawLine(pen, 0, panel.Height - 1, panel.Width, panel.Height - 1);
+            };
+
+            // Thêm logo vào thanh điều hướng
+            PictureBox picLogo = new PictureBox();
+            picLogo.Size = new Size(40, 40);
+            picLogo.Location = new Point(20, 15);
+            picLogo.BackColor = Color.Transparent;
+            picLogo.Image = null; // Bạn có thể thêm logo ở đây
+            picLogo.SizeMode = PictureBoxSizeMode.Zoom;
+            this.navbarPanel.Controls.Add(picLogo);
+
+            // Thêm text logo
+            Label lblLogo = new Label();
+            lblLogo.Text = "Thư Viện";
+            lblLogo.Font = new Font("Segoe UI", 16, FontStyle.Bold);
+            lblLogo.ForeColor = Color.FromArgb(37, 99, 235);
+            lblLogo.Location = new Point(70, 15);
+            lblLogo.Size = new Size(120, 40);
+            lblLogo.TextAlign = ContentAlignment.MiddleLeft;
+            this.navbarPanel.Controls.Add(lblLogo);
+            this.navbarPanel.Controls.Add(this.picLogo);
             this.navbarPanel.Controls.Add(this.btnHome);
             this.navbarPanel.Controls.Add(this.btnBooks);
             this.navbarPanel.Controls.Add(this.btnSearch);
@@ -81,90 +110,134 @@ namespace LibraryManagementSystem
             this.navbarPanel.Controls.Add(this.btnLogout);
             this.navbarPanel.Controls.Add(this.lblUserName);
 
+            // picLogo
+            this.picLogo.Size = new Size(40, 40);
+            this.picLogo.Location = new Point(20, 15);
+            this.picLogo.BackColor = Color.Transparent;
+            this.picLogo.Image = null; // Set your logo image here
+            this.picLogo.SizeMode = PictureBoxSizeMode.Zoom;
+
+            // Logo text
+            lblLogo.Text = "Thư Viện";
+            lblLogo.Font = new Font("Segoe UI", 16, FontStyle.Bold);
+            lblLogo.ForeColor = Color.FromArgb(37, 99, 235);
+            lblLogo.Location = new Point(70, 15);
+            lblLogo.Size = new Size(120, 40);
+            lblLogo.TextAlign = ContentAlignment.MiddleLeft;
+            this.navbarPanel.Controls.Add(lblLogo);
+
             // contentPanel
             this.contentPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.contentPanel.BackColor = System.Drawing.Color.White;
+            this.contentPanel.BackColor = System.Drawing.Color.FromArgb(249, 250, 251);
+            this.contentPanel.Padding = new Padding(20);
+            this.contentPanel.AutoScroll = true;
 
+            // Cập nhật các nút trên thanh điều hướng với kiểu dáng mới
             // btnHome
             this.btnHome.Text = "Trang chủ";
             this.btnHome.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnHome.FlatAppearance.BorderSize = 0;
-            this.btnHome.ForeColor = System.Drawing.Color.White;
-            this.btnHome.Location = new System.Drawing.Point(10, 15);
-            this.btnHome.Size = new System.Drawing.Size(100, 30);
+            this.btnHome.Font = new Font("Segoe UI", 10, FontStyle.Bold);
+            this.btnHome.ForeColor = System.Drawing.Color.FromArgb(37, 99, 235);
+            this.btnHome.Location = new System.Drawing.Point(200, 15);
+            this.btnHome.Size = new System.Drawing.Size(110, 40);
+            this.btnHome.Cursor = Cursors.Hand;
             this.btnHome.Click += new System.EventHandler(this.btnHome_Click);
 
             // btnBooks
             this.btnBooks.Text = "Sách";
             this.btnBooks.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnBooks.FlatAppearance.BorderSize = 0;
-            this.btnBooks.ForeColor = System.Drawing.Color.White;
-            this.btnBooks.Location = new System.Drawing.Point(120, 15);
-            this.btnBooks.Size = new System.Drawing.Size(100, 30);
+            this.btnBooks.Font = new Font("Segoe UI", 10, FontStyle.Bold);
+            this.btnBooks.ForeColor = System.Drawing.Color.FromArgb(37, 99, 235);
+            this.btnBooks.Location = new System.Drawing.Point(310, 15);
+            this.btnBooks.Size = new System.Drawing.Size(110, 40);
+            this.btnBooks.Cursor = Cursors.Hand;
             this.btnBooks.Click += new System.EventHandler(this.btnBooks_Click);
 
             // btnSearch
             this.btnSearch.Text = "Tìm kiếm";
             this.btnSearch.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnSearch.FlatAppearance.BorderSize = 0;
-            this.btnSearch.ForeColor = System.Drawing.Color.White;
-            this.btnSearch.Location = new System.Drawing.Point(230, 15);
-            this.btnSearch.Size = new System.Drawing.Size(100, 30);
+            this.btnSearch.Font = new Font("Segoe UI", 10, FontStyle.Bold);
+            this.btnSearch.ForeColor = System.Drawing.Color.FromArgb(37, 99, 235);
+            this.btnSearch.Location = new System.Drawing.Point(420, 15);
+            this.btnSearch.Size = new System.Drawing.Size(110, 40);
+            this.btnSearch.Cursor = Cursors.Hand;
             this.btnSearch.Click += new System.EventHandler(this.btnSearch_Click);
 
             // btnMyBooks
-            this.btnMyBooks.Text = "Sách đang mượn";
+            this.btnMyBooks.Text = "Sách của tôi";
             this.btnMyBooks.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnMyBooks.FlatAppearance.BorderSize = 0;
-            this.btnMyBooks.ForeColor = System.Drawing.Color.White;
-            this.btnMyBooks.Location = new System.Drawing.Point(340, 15);
-            this.btnMyBooks.Size = new System.Drawing.Size(110, 30);
+            this.btnMyBooks.Font = new Font("Segoe UI", 10, FontStyle.Bold);
+            this.btnMyBooks.ForeColor = System.Drawing.Color.FromArgb(37, 99, 235);
+            this.btnMyBooks.Location = new System.Drawing.Point(530, 15);
+            this.btnMyBooks.Size = new System.Drawing.Size(120, 40);
+            this.btnMyBooks.Cursor = Cursors.Hand;
             this.btnMyBooks.Click += new System.EventHandler(this.btnMyBooks_Click);
+
+            // lblUserName
+            this.lblUserName.Text = "";
+            this.lblUserName.Font = new Font("Segoe UI", 10, FontStyle.Bold);
+            this.lblUserName.ForeColor = System.Drawing.Color.FromArgb(37, 99, 235);
+            this.lblUserName.Location = new System.Drawing.Point(650, 15);
+            this.lblUserName.Size = new System.Drawing.Size(120, 40);
+            this.lblUserName.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 
             // btnLogin
             this.btnLogin.Text = "Đăng nhập";
             this.btnLogin.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnLogin.FlatAppearance.BorderSize = 0;
+            this.btnLogin.Font = new Font("Segoe UI", 10, FontStyle.Bold);
+            this.btnLogin.BackColor = System.Drawing.Color.FromArgb(37, 99, 235);
             this.btnLogin.ForeColor = System.Drawing.Color.White;
-            this.btnLogin.Location = new System.Drawing.Point(680, 15);
-            this.btnLogin.Size = new System.Drawing.Size(100, 30);
+            this.btnLogin.Location = new System.Drawing.Point(780, 15);
+            this.btnLogin.Size = new System.Drawing.Size(100, 40);
+            this.btnLogin.Cursor = Cursors.Hand;
             this.btnLogin.Click += new System.EventHandler(this.btnLogin_Click);
+            // Bo góc cho nút đăng nhập
+            this.btnLogin.Paint += (sender, e) => {
+                var button = sender as Button;
+                var path = new System.Drawing.Drawing2D.GraphicsPath();
+                path.AddArc(0, 0, 20, 20, 180, 90);
+                path.AddArc(button.Width - 20, 0, 20, 20, 270, 90);
+                path.AddArc(button.Width - 20, button.Height - 20, 20, 20, 0, 90);
+                path.AddArc(0, button.Height - 20, 20, 20, 90, 90);
+                button.Region = new Region(path);
+            };
 
             // btnProfile
             this.btnProfile.Text = "Hồ sơ";
             this.btnProfile.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnProfile.FlatAppearance.BorderSize = 0;
-            this.btnProfile.ForeColor = System.Drawing.Color.White;
-            this.btnProfile.Location = new System.Drawing.Point(680, 15);
-            this.btnProfile.Size = new System.Drawing.Size(100, 30);
+            this.btnProfile.Font = new Font("Segoe UI", 10, FontStyle.Bold);
+            this.btnProfile.ForeColor = System.Drawing.Color.FromArgb(37, 99, 235);
+            this.btnProfile.Location = new System.Drawing.Point(780, 15);
+            this.btnProfile.Size = new System.Drawing.Size(100, 40);
+            this.btnProfile.Cursor = Cursors.Hand;
             this.btnProfile.Click += new System.EventHandler(this.btnProfile_Click);
 
             // btnLogout
             this.btnLogout.Text = "Đăng xuất";
             this.btnLogout.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnLogout.FlatAppearance.BorderSize = 0;
-            this.btnLogout.ForeColor = System.Drawing.Color.White;
-            this.btnLogout.Location = new System.Drawing.Point(790, 15);
-            this.btnLogout.Size = new System.Drawing.Size(100, 30);
+            this.btnLogout.Font = new Font("Segoe UI", 10, FontStyle.Bold);
+            this.btnLogout.ForeColor = System.Drawing.Color.FromArgb(220, 38, 38);
+            this.btnLogout.Location = new System.Drawing.Point(880, 15);
+            this.btnLogout.Size = new System.Drawing.Size(100, 40);
+            this.btnLogout.Cursor = Cursors.Hand;
             this.btnLogout.Click += new System.EventHandler(this.btnLogout_Click);
 
-            // lblUserName
-            this.lblUserName.Text = "";
-            this.lblUserName.ForeColor = System.Drawing.Color.White;
-            this.lblUserName.Location = new System.Drawing.Point(580, 15);
-            this.lblUserName.Size = new System.Drawing.Size(100, 30);
-            this.lblUserName.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-
             // MainForm
-            this.ClientSize = new System.Drawing.Size(900, 600);
+            this.ClientSize = new System.Drawing.Size(1000, 700);
             this.Controls.Add(this.mainPanel);
             this.Text = "Thư Viện Trực Tuyến";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
+            this.MinimumSize = new Size(900, 600);
 
             this.ResumeLayout(false);
         }
-
 
         private void InitializePanels()
         {
@@ -195,7 +268,9 @@ namespace LibraryManagementSystem
 
             if (isAuthenticated)
             {
-                lblUserName.Text = $"Xin chào, {Library.Instance.CurrentUser.Name.Split(' ')[Library.Instance.CurrentUser.Name.Split(' ').Length - 1]}";
+                string[] nameParts = Library.Instance.CurrentUser.Name.Split(' ');
+                string firstName = nameParts[nameParts.Length - 1];
+                lblUserName.Text = $"Xin chào, {firstName}";
                 // Hiển thị thông tin người dùng trong phần Hồ sơ
                 profilePanel.UpdateProfileInfo();
             }
@@ -249,7 +324,7 @@ namespace LibraryManagementSystem
         private void btnLogout_Click(object sender, EventArgs e)
         {
             // Cập nhật trạng thái sách trước khi đăng xuất
-            Library.Instance.ResetBookStatus(); // Đặt lại trạng thái tất cả sách về có sẵn
+            Library.Instance.ResetBookStatus();
 
             // Đặt người dùng hiện tại thành null
             Library.Instance.CurrentUser = null;
@@ -261,9 +336,29 @@ namespace LibraryManagementSystem
             ShowPanel(homePanel);
         }
 
+        // Public methods for navigation from other panels
+        public void ShowBooksPanel()
+        {
+            ShowPanel(booksPanel);
+        }
+
+        public void ShowLoginForm()
+        {
+            LoginForm loginForm = new LoginForm();
+            if (loginForm.ShowDialog() == DialogResult.OK)
+            {
+                UpdateNavbar();
+                UpdateAllPanels();
+                // Hiển thị thông tin người dùng trong phần Hồ sơ
+                profilePanel.UpdateProfileInfo();
+            }
+        }
+
         // Thêm phương thức UpdateAllPanels để cập nhật tất cả các panel
         public void UpdateAllPanels()
         {
+            this.SuspendLayout();
+
             // Cập nhật danh sách sách
             booksPanel.LoadBooks();
 
@@ -276,1020 +371,14 @@ namespace LibraryManagementSystem
                 myBooksPanel.LoadBorrowedBooks();
                 profilePanel.UpdateProfileInfo();
             }
-        }
 
-        private void ShowLoginForm()
-        {
-            LoginForm loginForm = new LoginForm();
-            if (loginForm.ShowDialog() == DialogResult.OK)
-            {
-                UpdateNavbar();
-                UpdateAllPanels();
-                // Hiển thị thông tin người dùng trong phần Hồ sơ
-                profilePanel.UpdateProfileInfo();
-            }
+            this.ResumeLayout();
         }
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             Library.Instance.ResetBookStatus();
             Library.Instance.SaveData();
-        }
-    }
-
-    // Panel cho trang chủ
-    public class HomePanel : Panel
-    {
-        private Label lblTitle;
-        private Label lblSubtitle;
-        private FlowLayoutPanel popularBooksPanel;
-
-        public HomePanel()
-        {
-            InitializeComponent();
-            LoadPopularBooks();
-        }
-
-        private void InitializeComponent()
-        {
-            this.lblTitle = new Label();
-            this.lblSubtitle = new Label();
-            this.popularBooksPanel = new FlowLayoutPanel();
-
-            // lblTitle
-            this.lblTitle.Text = "Thư Viện Trực Tuyến";
-            this.lblTitle.Font = new Font("Arial", 24, FontStyle.Bold);
-            this.lblTitle.Location = new Point(20, 20);
-            this.lblTitle.Size = new Size(400, 40);
-
-            // lblSubtitle
-            this.lblSubtitle.Text = "Sách Được Mượn Nhiều Nhất";
-            this.lblSubtitle.Font = new Font("Arial", 16, FontStyle.Bold);
-            this.lblSubtitle.Location = new Point(20, 100);
-            this.lblSubtitle.Size = new Size(400, 30);
-
-            // popularBooksPanel
-            this.popularBooksPanel.Location = new Point(20, 140);
-            this.popularBooksPanel.Size = new Size(860, 400);
-            this.popularBooksPanel.AutoScroll = true;
-
-            // HomePanel
-            this.Controls.Add(this.lblTitle);
-            this.Controls.Add(this.lblSubtitle);
-            this.Controls.Add(this.popularBooksPanel);
-        }
-
-        public void LoadPopularBooks()
-        {
-            popularBooksPanel.Controls.Clear();
-
-            List<Book> popularBooks = Library.Instance.GetMostBorrowedBooks(5);
-
-            foreach (Book book in popularBooks)
-            {
-                BookCard bookCard = new BookCard(book);
-                popularBooksPanel.Controls.Add(bookCard);
-            }
-        }
-    }
-
-    // Panel cho danh sách sách
-    public class BooksPanel : Panel
-    {
-        private Label lblTitle;
-        private FlowLayoutPanel booksPanel;
-
-        public BooksPanel()
-        {
-            InitializeComponent();
-            LoadBooks();
-        }
-
-        private void InitializeComponent()
-        {
-            this.lblTitle = new Label();
-            this.booksPanel = new FlowLayoutPanel();
-
-            // lblTitle
-            this.lblTitle.Text = "Danh sách sách";
-            this.lblTitle.Font = new Font("Arial", 20, FontStyle.Bold);
-            this.lblTitle.Location = new Point(20, 20);
-            this.lblTitle.Size = new Size(400, 30);
-
-            // booksPanel
-            this.booksPanel.Location = new Point(20, 60);
-            this.booksPanel.Size = new Size(860, 480);
-            this.booksPanel.AutoScroll = true;
-
-            // BooksPanel
-            this.Controls.Add(this.lblTitle);
-            this.Controls.Add(this.booksPanel);
-        }
-
-        public void LoadBooks()
-        {
-            booksPanel.Controls.Clear();
-
-            foreach (Book book in Library.Instance.Books)
-            {
-                BookCard bookCard = new BookCard(book);
-                booksPanel.Controls.Add(bookCard);
-            }
-        }
-
-    }
-
-    // Panel cho tìm kiếm
-    public class SearchPanel : Panel
-    {
-        private Label lblTitle;
-        private TextBox txtSearch;
-        private Button btnSearch;
-        private FlowLayoutPanel resultsPanel;
-
-        public SearchPanel()
-        {
-            InitializeComponent();
-        }
-
-        private void InitializeComponent()
-        {
-            this.lblTitle = new Label();
-            this.txtSearch = new TextBox();
-            this.btnSearch = new Button();
-            this.resultsPanel = new FlowLayoutPanel();
-
-            // lblTitle
-            this.lblTitle.Text = "Tìm kiếm sách";
-            this.lblTitle.Font = new Font("Arial", 20, FontStyle.Bold);
-            this.lblTitle.Location = new Point(20, 20);
-            this.lblTitle.Size = new Size(400, 30);
-
-            // txtSearch
-            this.txtSearch.Location = new Point(20, 60);
-            this.txtSearch.Size = new Size(300, 25);
-            this.txtSearch.Font = new Font("Arial", 12);
-
-            // btnSearch
-            this.btnSearch.Text = "Tìm kiếm";
-            this.btnSearch.Location = new Point(330, 60);
-            this.btnSearch.Size = new Size(100, 25);
-            this.btnSearch.Click += new EventHandler(this.btnSearch_Click);
-
-            // resultsPanel
-            this.resultsPanel.Location = new Point(20, 100);
-            this.resultsPanel.Size = new Size(860, 440);
-            this.resultsPanel.AutoScroll = true;
-
-            // SearchPanel
-            this.Controls.Add(this.lblTitle);
-            this.Controls.Add(this.txtSearch);
-            this.Controls.Add(this.btnSearch);
-            this.Controls.Add(this.resultsPanel);
-        }
-
-        private void btnSearch_Click(object sender, EventArgs e)
-        {
-            string query = txtSearch.Text.Trim();
-
-            if (string.IsNullOrEmpty(query))
-            {
-                return;
-            }
-
-            List<Book> results = Library.Instance.SearchBooks(query);
-
-            resultsPanel.Controls.Clear();
-
-            if (results.Count == 0)
-            {
-                Label lblNoResults = new Label();
-                lblNoResults.Text = $"Không tìm thấy kết quả nào phù hợp với từ khóa \"{query}\"";
-                lblNoResults.Location = new Point(0, 0);
-                lblNoResults.Size = new Size(400, 30);
-                resultsPanel.Controls.Add(lblNoResults);
-            }
-            else
-            {
-                foreach (Book book in results)
-                {
-                    BookCard bookCard = new BookCard(book);
-                    resultsPanel.Controls.Add(bookCard);
-                }
-            }
-        }
-    }
-
-    // Panel cho sách đang mượn
-    public class MyBooksPanel : Panel
-    {
-        private Label lblTitle;
-        private FlowLayoutPanel borrowedBooksPanel;
-
-        public MyBooksPanel()
-        {
-            InitializeComponent();
-        }
-
-        private void InitializeComponent()
-        {
-            this.lblTitle = new Label();
-            this.borrowedBooksPanel = new FlowLayoutPanel();
-
-            // lblTitle
-            this.lblTitle.Text = "Sách đang mượn";
-            this.lblTitle.Font = new Font("Arial", 20, FontStyle.Bold);
-            this.lblTitle.Location = new Point(20, 20);
-            this.lblTitle.Size = new Size(400, 30);
-
-            // borrowedBooksPanel
-            this.borrowedBooksPanel.Location = new Point(20, 60);
-            this.borrowedBooksPanel.Size = new Size(860, 480);
-            this.borrowedBooksPanel.AutoScroll = true;
-
-            // MyBooksPanel
-            this.Controls.Add(this.lblTitle);
-            this.Controls.Add(this.borrowedBooksPanel);
-        }
-
-        public void LoadBorrowedBooks()
-        {
-            borrowedBooksPanel.Controls.Clear();
-
-            List<Book> borrowedBooks = Library.Instance.GetBorrowedBooks();
-
-            if (borrowedBooks.Count == 0)
-            {
-                Label lblNoBooks = new Label();
-                lblNoBooks.Text = "Bạn chưa mượn sách nào";
-                lblNoBooks.Location = new Point(0, 0);
-                lblNoBooks.Size = new Size(400, 30);
-                borrowedBooksPanel.Controls.Add(lblNoBooks);
-            }
-            else
-            {
-                foreach (Book book in borrowedBooks)
-                {
-                    BorrowedBookCard bookCard = new BorrowedBookCard(book);
-                    borrowedBooksPanel.Controls.Add(bookCard);
-                }
-            }
-        }
-    }
-
-    // Card hiển thị sách
-    public class BookCard : Panel
-    {
-        private Book book;
-        private PictureBox picCover;
-        private Label lblTitle;
-        private Label lblAuthor;
-        private Label lblGenre;
-        private Label lblStatus;
-        private Button btnDetails;
-
-        public BookCard(Book book)
-        {
-            this.book = book;
-            InitializeComponent();
-        }
-
-        private void InitializeComponent()
-        {
-            this.picCover = new PictureBox();
-            this.lblTitle = new Label();
-            this.lblAuthor = new Label();
-            this.lblGenre = new Label();
-            this.lblStatus = new Label();
-            this.btnDetails = new Button();
-
-            // BookCard
-            this.Size = new Size(200, 300);
-            this.BorderStyle = BorderStyle.FixedSingle;
-            this.Margin = new Padding(10);
-
-            // picCover
-            this.picCover.Size = new Size(180, 150);
-            this.picCover.Location = new Point(10, 10);
-            this.picCover.BackColor = Color.LightGray;
-            this.picCover.SizeMode = PictureBoxSizeMode.Zoom;
-
-            // lblTitle
-            this.lblTitle.Text = book.Title;
-            this.lblTitle.Font = new Font("Arial", 10, FontStyle.Bold);
-            this.lblTitle.Location = new Point(10, 170);
-            this.lblTitle.Size = new Size(180, 20);
-
-            // lblAuthor
-            this.lblAuthor.Text = book.Author;
-            this.lblAuthor.Location = new Point(10, 190);
-            this.lblAuthor.Size = new Size(180, 20);
-            this.lblAuthor.ForeColor = Color.Gray;
-
-            // lblGenre
-            this.lblGenre.Text = book.Genre;
-            this.lblGenre.Location = new Point(10, 210);
-            this.lblGenre.Size = new Size(90, 20);
-            this.lblGenre.ForeColor = Color.Gray;
-
-            // lblStatus
-            this.lblStatus.Text = book.Available ? "Có sẵn" : "Đã mượn";
-            this.lblStatus.Location = new Point(100, 210);
-            this.lblStatus.Size = new Size(90, 20);
-            this.lblStatus.ForeColor = book.Available ? Color.Green : Color.Red;
-            this.lblStatus.TextAlign = ContentAlignment.TopRight;
-
-            // btnDetails
-            this.btnDetails.Text = "Chi tiết";
-            this.btnDetails.Location = new Point(10, 240);
-            this.btnDetails.Size = new Size(180, 30);
-            this.btnDetails.Click += new EventHandler(this.btnDetails_Click);
-
-            // Add controls
-            this.Controls.Add(this.picCover);
-            this.Controls.Add(this.lblTitle);
-            this.Controls.Add(this.lblAuthor);
-            this.Controls.Add(this.lblGenre);
-            this.Controls.Add(this.lblStatus);
-            this.Controls.Add(this.btnDetails);
-        }
-
-        private void btnDetails_Click(object sender, EventArgs e)
-        {
-            BookDetailForm detailForm = new BookDetailForm(book);
-            detailForm.ShowDialog();
-        }
-    }
-
-    // Card hiển thị sách đã mượn
-    public class BorrowedBookCard : Panel
-    {
-        private Book book;
-        private PictureBox picCover;
-        private Label lblTitle;
-        private Label lblAuthor;
-        private Label lblDueDate;
-        private Button btnReturn;
-        private Button btnDetails;
-
-        public BorrowedBookCard(Book book)
-        {
-            this.book = book;
-            InitializeComponent();
-        }
-
-        private void InitializeComponent()
-        {
-            this.picCover = new PictureBox();
-            this.lblTitle = new Label();
-            this.lblAuthor = new Label();
-            this.lblDueDate = new Label();
-            this.btnReturn = new Button();
-            this.btnDetails = new Button();
-
-            // BorrowedBookCard
-            this.Size = new Size(400, 150);
-            this.BorderStyle = BorderStyle.FixedSingle;
-            this.Margin = new Padding(10);
-
-            // picCover
-            this.picCover.Size = new Size(100, 130);
-            this.picCover.Location = new Point(10, 10);
-            this.picCover.BackColor = Color.LightGray;
-            this.picCover.SizeMode = PictureBoxSizeMode.Zoom;
-
-            // lblTitle
-            this.lblTitle.Text = book.Title;
-            this.lblTitle.Font = new Font("Arial", 10, FontStyle.Bold);
-            this.lblTitle.Location = new Point(120, 10);
-            this.lblTitle.Size = new Size(270, 20);
-
-            // lblAuthor
-            this.lblAuthor.Text = book.Author;
-            this.lblAuthor.Location = new Point(120, 30);
-            this.lblAuthor.Size = new Size(270, 20);
-            this.lblAuthor.ForeColor = Color.Gray;
-
-            // lblDueDate
-            this.lblDueDate.Text = $"Hạn trả: {book.DueDate?.ToString("dd/MM/yyyy")}";
-            this.lblDueDate.Location = new Point(120, 50);
-            this.lblDueDate.Size = new Size(270, 20);
-
-            // btnReturn
-            this.btnReturn.Text = "Trả sách";
-            this.btnReturn.Location = new Point(290, 80);
-            this.btnReturn.Size = new Size(100, 30);
-            this.btnReturn.Click += new EventHandler(this.btnReturn_Click);
-
-            // btnDetails
-            this.btnDetails.Text = "Chi tiết";
-            this.btnDetails.Location = new Point(180, 80);
-            this.btnDetails.Size = new Size(100, 30);
-            this.btnDetails.Click += new EventHandler(this.btnDetails_Click);
-
-            // Add controls
-            this.Controls.Add(this.picCover);
-            this.Controls.Add(this.lblTitle);
-            this.Controls.Add(this.lblAuthor);
-            this.Controls.Add(this.lblDueDate);
-            this.Controls.Add(this.btnReturn);
-            this.Controls.Add(this.btnDetails);
-        }
-
-        private void btnReturn_Click(object sender, EventArgs e)
-        {
-            DialogResult result = MessageBox.Show($"Bạn có chắc chắn muốn trả sách '{book.Title}'?", "Xác nhận", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-
-            if (result == DialogResult.Yes)
-            {
-                string message = Library.Instance.CurrentUser.ReturnBook(book);
-                MessageBox.Show(message, "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-                // Save data to the system
-                Library.Instance.SaveData();
-
-                // Refresh the parent panel
-                if (this.Parent is MyBooksPanel)
-                {
-                    ((MyBooksPanel)this.Parent).LoadBorrowedBooks();
-                }
-
-                // Update the book list
-                if (Application.OpenForms["MainForm"] is MainForm mainForm)
-                {
-                    mainForm.UpdateAllPanels();
-                }
-            }
-        }
-
-        private void btnDetails_Click(object sender, EventArgs e)
-        {
-            BookDetailForm detailForm = new BookDetailForm(book);
-            detailForm.ShowDialog();
-        }
-    }
-
-    // Form chi tiết sách
-    public class BookDetailForm : Form
-    {
-        private Book book;
-        private PictureBox picCover;
-        private Label lblTitle;
-        private Label lblAuthor;
-        private Label lblYear;
-        private Label lblGenre;
-        private Label lblPublisher;
-        private Label lblPages;
-        private Label lblBorrowCount;
-        private Label lblStatus;
-        private Label lblDescription;
-        private TextBox txtDescription;
-        private Button btnBorrow;
-        private Button btnClose;
-
-        public BookDetailForm(Book book)
-        {
-            this.book = book;
-            InitializeComponent();
-        }
-
-        private void InitializeComponent()
-        {
-            this.picCover = new PictureBox();
-            this.lblTitle = new Label();
-            this.lblAuthor = new Label();
-            this.lblYear = new Label();
-            this.lblGenre = new Label();
-            this.lblPublisher = new Label();
-            this.lblPages = new Label();
-            this.lblBorrowCount = new Label();
-            this.lblStatus = new Label();
-            this.lblDescription = new Label();
-            this.txtDescription = new TextBox();
-            this.btnBorrow = new Button();
-            this.btnClose = new Button();
-
-            // BookDetailForm
-            this.ClientSize = new Size(600, 500);
-            this.Text = "Chi tiết sách";
-            this.StartPosition = FormStartPosition.CenterParent;
-            this.FormBorderStyle = FormBorderStyle.FixedDialog;
-            this.MaximizeBox = false;
-
-            // picCover
-            this.picCover.Size = new Size(200, 250);
-            this.picCover.Location = new Point(20, 20);
-            this.picCover.BackColor = Color.LightGray;
-            this.picCover.SizeMode = PictureBoxSizeMode.Zoom;
-
-            // lblTitle
-            this.lblTitle.Text = book.Title;
-            this.lblTitle.Font = new Font("Arial", 16, FontStyle.Bold);
-            this.lblTitle.Location = new Point(240, 20);
-            this.lblTitle.Size = new Size(340, 30);
-
-            // lblAuthor
-            this.lblAuthor.Text = $"Tác giả: {book.Author}";
-            this.lblAuthor.Location = new Point(240, 60);
-            this.lblAuthor.Size = new Size(340, 20);
-
-            // lblYear
-            this.lblYear.Text = $"Năm xuất bản: {book.Year}";
-            this.lblYear.Location = new Point(240, 90);
-            this.lblYear.Size = new Size(340, 20);
-
-            // lblGenre
-            this.lblGenre.Text = $"Thể loại: {book.Genre}";
-            this.lblGenre.Location = new Point(240, 120);
-            this.lblGenre.Size = new Size(340, 20);
-
-            // lblPublisher
-            this.lblPublisher.Text = $"Nhà xuất bản: {book.Publisher}";
-            this.lblPublisher.Location = new Point(240, 150);
-            this.lblPublisher.Size = new Size(340, 20);
-
-            // lblPages
-            this.lblPages.Text = $"Số trang: {book.Pages}";
-            this.lblPages.Location = new Point(240, 180);
-            this.lblPages.Size = new Size(340, 20);
-
-            // lblBorrowCount
-            this.lblBorrowCount.Text = $"Lượt mượn: {book.BorrowCount}";
-            this.lblBorrowCount.Location = new Point(240, 210);
-            this.lblBorrowCount.Size = new Size(340, 20);
-
-            // lblStatus
-            this.lblStatus.Text = $"Trạng thái: {(book.Available ? "Có sẵn" : "Đã mượn")}";
-            this.lblStatus.Location = new Point(240, 240);
-            this.lblStatus.Size = new Size(340, 20);
-            this.lblStatus.ForeColor = book.Available ? Color.Green : Color.Red;
-
-            // lblDescription
-            this.lblDescription.Text = "Mô tả:";
-            this.lblDescription.Location = new Point(20, 280);
-            this.lblDescription.Size = new Size(100, 20);
-
-            // txtDescription
-            this.txtDescription.Text = book.Description;
-            this.txtDescription.Location = new Point(20, 300);
-            this.txtDescription.Size = new Size(560, 100);
-            this.txtDescription.Multiline = true;
-            this.txtDescription.ReadOnly = true;
-            this.txtDescription.ScrollBars = ScrollBars.Vertical;
-
-            // btnBorrow
-            this.btnBorrow.Text = book.Available ? "Mượn sách" : "Đã mượn";
-            this.btnBorrow.Location = new Point(20, 420);
-            this.btnBorrow.Size = new Size(100, 30);
-            this.btnBorrow.Enabled = book.Available;
-            this.btnBorrow.Click += new EventHandler(this.btnBorrow_Click);
-
-            // btnClose
-            this.btnClose.Text = "Đóng";
-            this.btnClose.Location = new Point(480, 420);
-            this.btnClose.Size = new Size(100, 30);
-            this.btnClose.Click += new EventHandler(this.btnClose_Click);
-
-            // Add controls
-            this.Controls.Add(this.picCover);
-            this.Controls.Add(this.lblTitle);
-            this.Controls.Add(this.lblAuthor);
-            this.Controls.Add(this.lblYear);
-            this.Controls.Add(this.lblGenre);
-            this.Controls.Add(this.lblPublisher);
-            this.Controls.Add(this.lblPages);
-            this.Controls.Add(this.lblBorrowCount);
-            this.Controls.Add(this.lblStatus);
-            this.Controls.Add(this.lblDescription);
-            this.Controls.Add(this.txtDescription);
-            this.Controls.Add(this.btnBorrow);
-            this.Controls.Add(this.btnClose);
-        }
-
-        private void btnBorrow_Click(object sender, EventArgs e)
-        {
-            if (Library.Instance.CurrentUser == null)
-            {
-                MessageBox.Show("Bạn cần đăng nhập để mượn sách.", "Yêu cầu đăng nhập", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                LoginForm loginForm = new LoginForm();
-                if (loginForm.ShowDialog() == DialogResult.OK)
-                {
-                    // Sử dụng MainForm từ FormManager
-                    if (MainForm.FormManager.MainForm != null)
-                    {
-                        MainForm.FormManager.MainForm.Invoke((MethodInvoker)delegate
-                        {
-                            MainForm.FormManager.MainForm.UpdateNavbar();
-                            MainForm.FormManager.MainForm.UpdateAllPanels();
-                        });
-                    }
-                    // Nếu đăng nhập thành công, tiếp tục mượn sách
-                    ShowBorrowDialog();
-                }
-                return;
-            }
-            ShowBorrowDialog();
-        }
-
-        private void ShowBorrowDialog()
-        {
-            BorrowForm borrowForm = new BorrowForm(book);
-            if (borrowForm.ShowDialog() == DialogResult.OK)
-            {
-                this.btnBorrow.Text = "Đã mượn";
-                this.btnBorrow.Enabled = false;
-                this.lblStatus.Text = "Trạng thái: Đã mượn";
-                this.lblStatus.ForeColor = Color.Red;
-            }
-        }
-
-        private void btnClose_Click(object sender, EventArgs e)
-        {
-            this.Close();
-        }
-    }
-
-    // Form mượn sách
-    public class BorrowForm : Form
-    {
-        private Book book;
-        private Label lblTitle;
-        private Label lblBookInfo;
-        private Label lblBorrowDate;
-        private Label lblReturnDate;
-        private DateTimePicker dtpBorrowDate;
-        private DateTimePicker dtpReturnDate;
-        private Button btnBorrow;
-        private Button btnCancel;
-
-        public BorrowForm(Book book)
-        {
-            this.book = book;
-            InitializeComponent();
-        }
-
-        private void InitializeComponent()
-        {
-            this.lblTitle = new Label();
-            this.lblBookInfo = new Label();
-            this.lblBorrowDate = new Label();
-            this.lblReturnDate = new Label();
-            this.dtpBorrowDate = new DateTimePicker();
-            this.dtpReturnDate = new DateTimePicker();
-            this.btnBorrow = new Button();
-            this.btnCancel = new Button();
-
-            // BorrowForm
-            this.ClientSize = new Size(400, 250);
-            this.Text = "Mượn sách";
-            this.StartPosition = FormStartPosition.CenterParent;
-            this.FormBorderStyle = FormBorderStyle.FixedDialog;
-            this.MaximizeBox = false;
-
-            // lblTitle
-            this.lblTitle.Text = "Mượn sách";
-            this.lblTitle.Font = new Font("Arial", 16, FontStyle.Bold);
-            this.lblTitle.Location = new Point(20, 20);
-            this.lblTitle.Size = new Size(360, 30);
-
-            // lblBookInfo
-            this.lblBookInfo.Text = $"Sách: {book.Title}";
-            this.lblBookInfo.Location = new Point(20, 60);
-            this.lblBookInfo.Size = new Size(360, 20);
-
-            // lblBorrowDate
-            this.lblBorrowDate.Text = "Ngày mượn:";
-            this.lblBorrowDate.Location = new Point(20, 100);
-            this.lblBorrowDate.Size = new Size(100, 20);
-
-            // dtpBorrowDate
-            this.dtpBorrowDate.Location = new Point(120, 100);
-            this.dtpBorrowDate.Size = new Size(200, 20);
-            this.dtpBorrowDate.Format = DateTimePickerFormat.Short;
-            this.dtpBorrowDate.MinDate = DateTime.Today.AddDays(0);
-            this.dtpBorrowDate.MaxDate = DateTime.Today.AddDays(7);
-            this.dtpBorrowDate.ValueChanged += new EventHandler(this.dtpBorrowDate_ValueChanged);
-
-            // lblReturnDate
-            this.lblReturnDate.Text = "Ngày trả:";
-            this.lblReturnDate.Location = new Point(20, 140);
-            this.lblReturnDate.Size = new Size(100, 20);
-
-            // dtpReturnDate
-            this.dtpReturnDate.Location = new Point(120, 140);
-            this.dtpReturnDate.Size = new Size(200, 20);
-            this.dtpReturnDate.Format = DateTimePickerFormat.Short;
-            this.dtpReturnDate.MinDate = DateTime.Today.AddDays(1);
-            this.dtpReturnDate.MaxDate = DateTime.Today.AddDays(30);
-
-            // btnBorrow
-            this.btnBorrow.Text = "Mượn";
-            this.btnBorrow.Location = new Point(120, 180);
-            this.btnBorrow.Size = new Size(100, 30);
-            this.btnBorrow.Click += new EventHandler(this.btnBorrow_Click);
-
-            // btnCancel
-            this.btnCancel.Text = "Hủy";
-            this.btnCancel.Location = new Point(230, 180);
-            this.btnCancel.Size = new Size(100, 30);
-            this.btnCancel.Click += new EventHandler(this.btnCancel_Click);
-
-            // Add controls
-            this.Controls.Add(this.lblTitle);
-            this.Controls.Add(this.lblBookInfo);
-            this.Controls.Add(this.lblBorrowDate);
-            this.Controls.Add(this.dtpBorrowDate);
-            this.Controls.Add(this.lblReturnDate);
-            this.Controls.Add(this.dtpReturnDate);
-            this.Controls.Add(this.btnBorrow);
-            this.Controls.Add(this.btnCancel);
-        }
-
-        private void dtpBorrowDate_ValueChanged(object sender, EventArgs e)
-        {
-            // Update return dates based on borrow date
-            DateTime borrowDate = dtpBorrowDate.Value;
-            dtpReturnDate.MinDate = borrowDate.AddDays(1);
-            dtpReturnDate.Value = borrowDate.AddDays(10); // Mặc định 10 ngày
-        }
-
-        private void btnBorrow_Click(object sender, EventArgs e)
-        {
-            DateTime borrowDate = dtpBorrowDate.Value;
-            DateTime returnDate = dtpReturnDate.Value;
-
-            if (returnDate <= borrowDate)
-            {
-                MessageBox.Show("Ngày trả sách phải sau ngày mượn sách.", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-
-            string message = Library.Instance.CurrentUser.BorrowBook(book, borrowDate, returnDate);
-
-            MessageBox.Show($"Chúc mừng! {message}\nVui lòng đến thư viện vào ngày {borrowDate.ToString("dd/MM/yyyy")} để nhận sách.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-            // Cập nhật giao diện
-            if (MainForm.FormManager.MainForm != null)
-            {
-                MainForm.FormManager.MainForm.Invoke((MethodInvoker)delegate
-                {
-                    MainForm.FormManager.MainForm.UpdateAllPanels();
-                });
-            }
-
-            this.DialogResult = DialogResult.OK;
-            this.Close();
-        }
-
-        private void btnCancel_Click(object sender, EventArgs e)
-        {
-            this.DialogResult = DialogResult.Cancel;
-            this.Close();
-        }
-    }
-
-    public class LoginForm : Form
-    {
-        private Label lblTitle;
-        private TabControl tabControl;
-        private TabPage tabLogin;
-        private TabPage tabRegister;
-
-        // Login controls
-        private Label lblEmail;
-        private TextBox txtEmail;
-        private Label lblPassword;
-        private TextBox txtPassword;
-        private Button btnLogin;
-
-        // Register controls
-        private Label lblRegName;
-        private TextBox txtRegName;
-        private Label lblRegEmail;
-        private TextBox txtRegEmail;
-        private Label lblRegPassword;
-        private TextBox txtRegPassword;
-        private Label lblRegPhone;
-        private TextBox txtRegPhone;
-        private Label lblRegAddress;
-        private TextBox txtRegAddress;
-        private Button btnRegister;
-
-        public LoginForm()
-        {
-            InitializeComponent();
-        }
-
-        private void InitializeComponent()
-        {
-            this.lblTitle = new Label();
-            this.tabControl = new TabControl();
-            this.tabLogin = new TabPage();
-            this.tabRegister = new TabPage();
-
-            // Login controls
-            this.lblEmail = new Label();
-            this.txtEmail = new TextBox();
-            this.lblPassword = new Label();
-            this.txtPassword = new TextBox();
-            this.btnLogin = new Button();
-
-            // Register controls
-            this.lblRegName = new Label();
-            this.txtRegName = new TextBox();
-            this.lblRegEmail = new Label();
-            this.txtRegEmail = new TextBox();
-            this.lblRegPassword = new Label();
-            this.txtRegPassword = new TextBox();
-            this.lblRegPhone = new Label();
-            this.txtRegPhone = new TextBox();
-            this.lblRegAddress = new Label();
-            this.txtRegAddress = new TextBox();
-            this.btnRegister = new Button();
-
-            // LoginForm
-            this.ClientSize = new Size(400, 400);
-            this.Text = "Đăng nhập";
-            this.StartPosition = FormStartPosition.CenterParent;
-            this.FormBorderStyle = FormBorderStyle.FixedDialog;
-            this.MaximizeBox = false;
-
-            // lblTitle
-            this.lblTitle.Text = "Thư Viện Trực Tuyến";
-            this.lblTitle.Font = new Font("Arial", 16, FontStyle.Bold);
-            this.lblTitle.Location = new Point(20, 20);
-            this.lblTitle.Size = new Size(360, 30);
-            this.lblTitle.TextAlign = ContentAlignment.MiddleCenter;
-
-            // tabControl
-            this.tabControl.Location = new Point(20, 60);
-            this.tabControl.Size = new Size(360, 320);
-            this.tabControl.Controls.Add(this.tabLogin);
-            this.tabControl.Controls.Add(this.tabRegister);
-
-            // tabLogin
-            this.tabLogin.Text = "Đăng nhập";
-            this.tabLogin.Controls.Add(this.lblEmail);
-            this.tabLogin.Controls.Add(this.txtEmail);
-            this.tabLogin.Controls.Add(this.lblPassword);
-            this.tabLogin.Controls.Add(this.txtPassword);
-            this.tabLogin.Controls.Add(this.btnLogin);
-
-            // tabRegister
-            this.tabRegister.Text = "Đăng ký";
-            this.tabRegister.Controls.Add(this.lblRegName);
-            this.tabRegister.Controls.Add(this.txtRegName);
-            this.tabRegister.Controls.Add(this.lblRegEmail);
-            this.tabRegister.Controls.Add(this.txtRegEmail);
-            this.tabRegister.Controls.Add(this.lblRegPassword);
-            this.tabRegister.Controls.Add(this.txtRegPassword);
-            this.tabRegister.Controls.Add(this.lblRegPhone);
-            this.tabRegister.Controls.Add(this.txtRegPhone);
-            this.tabRegister.Controls.Add(this.lblRegAddress);
-            this.tabRegister.Controls.Add(this.txtRegAddress);
-            this.tabRegister.Controls.Add(this.btnRegister);
-
-            // Login controls
-            this.lblEmail.Text = "Email:";
-            this.lblEmail.Location = new Point(20, 20);
-            this.lblEmail.Size = new Size(100, 20);
-
-            this.txtEmail.Location = new Point(20, 40);
-            this.txtEmail.Size = new Size(300, 20);
-
-            this.lblPassword.Text = "Mật khẩu:";
-            this.lblPassword.Location = new Point(20, 70);
-            this.lblPassword.Size = new Size(100, 20);
-
-            this.txtPassword.Location = new Point(20, 90);
-            this.txtPassword.Size = new Size(300, 20);
-            this.txtPassword.PasswordChar = '*';
-
-            this.btnLogin.Text = "Đăng nhập";
-            this.btnLogin.Location = new Point(120, 130);
-            this.btnLogin.Size = new Size(100, 30);
-            this.btnLogin.Click += new EventHandler(this.btnLogin_Click);
-
-            // Register controls
-            this.lblRegName.Text = "Họ tên:";
-            this.lblRegName.Location = new Point(20, 20);
-            this.lblRegName.Size = new Size(100, 20);
-
-            this.txtRegName.Location = new Point(20, 40);
-            this.txtRegName.Size = new Size(300, 20);
-
-            this.lblRegEmail.Text = "Email:";
-            this.lblRegEmail.Location = new Point(20, 70);
-            this.lblRegEmail.Size = new Size(100, 20);
-
-            this.txtRegEmail.Location = new Point(20, 90);
-            this.txtRegEmail.Size = new Size(300, 20);
-
-            this.lblRegPassword.Text = "Mật khẩu:";
-            this.lblRegPassword.Location = new Point(20, 120);
-            this.lblRegPassword.Size = new Size(100, 20);
-
-            this.txtRegPassword.Location = new Point(20, 140);
-            this.txtRegPassword.Size = new Size(300, 20);
-            this.txtRegPassword.PasswordChar = '*';
-
-            this.lblRegPhone.Text = "Số điện thoại:";
-            this.lblRegPhone.Location = new Point(20, 170);
-            this.lblRegPhone.Size = new Size(100, 20);
-
-            this.txtRegPhone.Location = new Point(20, 190);
-            this.txtRegPhone.Size = new Size(300, 20);
-
-            this.lblRegAddress.Text = "Địa chỉ:";
-            this.lblRegAddress.Location = new Point(20, 220);
-            this.lblRegAddress.Size = new Size(100, 20);
-
-            this.txtRegAddress.Location = new Point(20, 240);
-            this.txtRegAddress.Size = new Size(300, 20);
-
-            this.btnRegister.Text = "Đăng ký";
-            this.btnRegister.Location = new Point(120, 270);
-            this.btnRegister.Size = new Size(100, 30);
-            this.btnRegister.Click += new EventHandler(this.btnRegister_Click);
-
-            // Add controls
-            this.Controls.Add(this.lblTitle);
-            this.Controls.Add(this.tabControl);
-        }
-
-        private void btnLogin_Click(object sender, EventArgs e)
-        {
-            string email = txtEmail.Text.Trim();
-            string password = txtPassword.Text;
-
-            if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password))
-            {
-                MessageBox.Show("Vui lòng nhập đầy đủ thông tin.", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-
-            // Giả lập đăng nhập thành công
-            User user = Library.Instance.FindUser(email, password);
-
-            if (user != null)
-            {
-                Library.Instance.CurrentUser = user;
-                user.RestoreBorrowedBooks(); // Khôi phục sách đã mượn
-                MessageBox.Show("Đăng nhập thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                this.DialogResult = DialogResult.OK;
-                this.Close();
-            }
-            else
-            {
-                MessageBox.Show("Đăng nhập thất bại! Kiểm tra lại email và mật khẩu.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        private void btnRegister_Click(object sender, EventArgs e)
-        {
-            string name = txtRegName.Text.Trim();
-            string email = txtRegEmail.Text.Trim();
-            string password = txtRegPassword.Text;
-            string phone = txtRegPhone.Text.Trim();
-            string address = txtRegAddress.Text.Trim();
-
-            if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(email) ||
-                string.IsNullOrEmpty(password) || string.IsNullOrEmpty(phone) ||
-                string.IsNullOrEmpty(address))
-            {
-                MessageBox.Show("Vui lòng nhập đầy đủ thông tin.", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-
-            // Kiểm tra email đã tồn tại
-            if (Library.Instance.IsEmailRegistered(email))
-            {
-                MessageBox.Show("Email đã được sử dụng. Vui lòng sử dụng email khác.", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-
-            // Kiểm tra độ dài mật khẩu
-            if (password.Length < 6)
-            {
-                MessageBox.Show("Mật khẩu phải có ít nhất 6 ký tự.", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-
-            // Kiểm tra định dạng email (giả lập)
-            if (!email.Contains("@") || !email.Contains("."))
-            {
-                MessageBox.Show("Email không hợp lệ.", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-
-            // Tạo người dùng mới
-            User newUser = new User(Guid.NewGuid().ToString(), name, email, password, phone, address);
-            Library.Instance.AddUser(newUser);
-            Library.Instance.CurrentUser = newUser;
-
-            MessageBox.Show("Đăng ký thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            this.DialogResult = DialogResult.OK;
-            this.Close();
         }
     }
 }

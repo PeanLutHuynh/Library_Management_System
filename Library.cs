@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text.Json.Serialization;
 
 namespace LibraryManagementSystem
 {
@@ -47,7 +46,6 @@ namespace LibraryManagementSystem
             this.currentUser = null;
         }
 
-
         // Singleton instance property
         public static Library Instance
         {
@@ -59,12 +57,6 @@ namespace LibraryManagementSystem
                 }
                 return instance;
             }
-        }
-
-        // Method to set the instance (used for deserialization)
-        public static void SetInstance(Library library)
-        {
-            instance = library;
         }
 
         // Method to initialize the library with sample data
@@ -84,32 +76,32 @@ namespace LibraryManagementSystem
             else
             {
                 // Thêm một số dữ liệu mẫu
-                AddBook(new Book("1", "Đắc Nhân Tâm", "Dale Carnegie", 1936, "Tâm lý - Kỹ năng sống", "NXB Tổng hợp TP.HCM", 320, 90,
-                    "Đắc nhân tâm (How to Win Friends and Influence People) là một quyển sách nhằm tự giúp bản thân (self-help) bán chạy nhất từ trước đến nay. Tác phẩm đã được chuyển ngữ sang hầu hết các thứ tiếng trên thế giới và có mặt ở hàng trăm quốc gia."));
+                AddBook(new Book("1", "Đắc Nhân Tâm", "Dale Carnegie", 1936, "Tâm lý - Kỹ năng sống", "NXB Tổng hợp TP.HCM", 320,
+                    "Đắc nhân tâm (How to Win Friends and Influence People) là một quyển sách nhằm tự giúp bản thân (self-help) bán chạy nhất từ trước đến nay. Tác phẩm đã được chuyển ngữ sang hầu hết các thứ tiếng trên thế giới và có mặt ở hàng trăm quốc gia.", 42));
 
-                AddBook(new Book("2", "Nhà Giả Kim", "Paulo Coelho", 1988, "Tiểu thuyết", "NXB Văn học", 224, 122,
-                    "Nhà giả kim là cuốn sách được xuất bản lần đầu ở Brasil năm 1988, và là cuốn sách nổi tiếng nhất của nhà văn Paulo Coelho. Tác phẩm đã được dịch ra 67 ngôn ngữ và bán ra tới 95 triệu bản."));
+                AddBook(new Book("2", "Nhà Giả Kim", "Paulo Coelho", 1988, "Tiểu thuyết", "NXB Văn học", 224,
+                    "Nhà giả kim là cuốn sách được xuất bản lần đầu ở Brasil năm 1988, và là cuốn sách nổi tiếng nhất của nhà văn Paulo Coelho. Tác phẩm đã được dịch ra 67 ngôn ngữ và bán ra tới 95 triệu bản.", 38));
 
-                AddBook(new Book("3", "Tôi Tài Giỏi, Bạn Cũng Thế", "Adam Khoo", 2008, "Kỹ năng sống", "NXB Trẻ", 304, 302, 
-                    "Tôi Tài Giỏi, Bạn Cũng Thế là cuốn sách giúp bạn khám phá ra tiềm năng thực sự của bản thân để thành công trong học tập và cuộc sống."));
+                AddBook(new Book("3", "Tôi Tài Giỏi, Bạn Cũng Thế", "Adam Khoo", 2008, "Kỹ năng sống", "NXB Trẻ", 304,
+                    "Tôi Tài Giỏi, Bạn Cũng Thế là cuốn sách giúp bạn khám phá ra tiềm năng thực sự của bản thân để thành công trong học tập và cuộc sống.", 35));
 
-                AddBook(new Book("4", "Tuổi Trẻ Đáng Giá Bao Nhiêu", "Rosie Nguyễn", 2016, "Tùy bút", "NXB Hội Nhà Văn", 285, 81, 
-                    "Tuổi Trẻ Đáng Giá Bao Nhiêu là tác phẩm đầu tay của tác giả Rosie Nguyễn, là tập hợp những bài viết của cô về những trải nghiệm trong cuộc sống, những chuyến đi, những suy ngẫm về tình yêu, hạnh phúc, thành công, v.v."));
+                AddBook(new Book("4", "Tuổi Trẻ Đáng Giá Bao Nhiêu", "Rosie Nguyễn", 2016, "Tùy bút", "NXB Hội Nhà Văn", 285,
+                    "Tuổi Trẻ Đáng Giá Bao Nhiêu là tác phẩm đầu tay của tác giả Rosie Nguyễn, là tập hợp những bài viết của cô về những trải nghiệm trong cuộc sống, những chuyến đi, những suy ngẫm về tình yêu, hạnh phúc, thành công, v.v.", 29));
 
-                AddBook(new Book("5", "Cà Phê Cùng Tony", "Tony Buổi Sáng", 2014, "Tùy bút", "NXB Trẻ", 268, 72,
-                    "Cà Phê Cùng Tony là tập hợp những bài viết được yêu thích trên Facebook của tác giả Tony Buổi Sáng. Đây là cuốn sách dành cho những người trẻ, những người đang tìm kiếm, khát khao một cuộc sống tốt đẹp hơn."));
+                AddBook(new Book("5", "Cà Phê Cùng Tony", "Tony Buổi Sáng", 2014, "Tùy bút", "NXB Trẻ", 268,
+                    "Cà Phê Cùng Tony là tập hợp những bài viết được yêu thích trên Facebook của tác giả Tony Buổi Sáng. Đây là cuốn sách dành cho những người trẻ, những người đang tìm kiếm, khát khao một cuộc sống tốt đẹp hơn.", 27));
 
-                AddBook(new Book("6", "Người Giàu Có Nhất Thành Babylon", "George S. Clason", 1926, "Kinh tế", "NXB Tổng hợp TP.HCM", 208, 64,
-                    "Người giàu có nhất thành Babylon là một cuốn sách kinh điển về tài chính cá nhân. Cuốn sách kể về cách làm giàu của người dân vùng Babylon cổ đại."));
+                AddBook(new Book("6", "Người Giàu Có Nhất Thành Babylon", "George S. Clason", 1926, "Kinh tế", "NXB Tổng hợp TP.HCM", 208,
+                    "Người giàu có nhất thành Babylon là một cuốn sách kinh điển về tài chính cá nhân. Cuốn sách kể về cách làm giàu của người dân vùng Babylon cổ đại.", 25));
 
-                AddBook(new Book("7", "Đời Ngắn Đừng Ngủ Dài", "Robin Sharma", 2011, "Kỹ năng sống", "NXB Trẻ", 228, 190, 
-                    "Đời Ngắn Đừng Ngủ Dài là cuốn sách của Robin Sharma, một tác giả chuyên viết về đề tài lãnh đạo và phát triển cá nhân. Cuốn sách này đưa ra những lời khuyên để sống một cuộc đời trọn vẹn và ý nghĩa."));
+                AddBook(new Book("7", "Đời Ngắn Đừng Ngủ Dài", "Robin Sharma", 2011, "Kỹ năng sống", "NXB Trẻ", 228,
+                    "Đời Ngắn Đừng Ngủ Dài là cuốn sách của Robin Sharma, một tác giả chuyên viết về đề tài lãnh đạo và phát triển cá nhân. Cuốn sách này đưa ra những lời khuyên để sống một cuộc đời trọn vẹn và ý nghĩa.", 22));
 
-                AddBook(new Book("8", "Hành Trình Về Phương Đông", "Baird T. Spalding", 1924, "Tâm linh", "NXB Hồng Đức", 256, 59, 
-                    "Hành Trình Về Phương Đông kể về những trải nghiệm của một đoàn khoa học gồm các chuyên gia hàng đầu của Hội Khoa Học Hoàng Gia Anh được cử sang Ấn Độ và Tây Tạng để tìm hiểu về những khả năng siêu nhiên của con người."));
+                AddBook(new Book("8", "Hành Trình Về Phương Đông", "Baird T. Spalding", 1924, "Tâm linh", "NXB Hồng Đức", 256,
+                    "Hành Trình Về Phương Đông kể về những trải nghiệm của một đoàn khoa học gồm các chuyên gia hàng đầu của Hội Khoa Học Hoàng Gia Anh được cử sang Ấn Độ và Tây Tạng để tìm hiểu về những khả năng siêu nhiên của con người.", 20));
 
                 // Thêm người dùng mẫu
-                AddUser(new User("1", "Nguyễn Văn A", "123456@gmail.com", "123456", "0123456789", "Hà Nội, Việt Nam"));
+                AddUser(new User("1", "Nguyễn Văn A", "12345678@gmail.com", "12345678", "0123456789", "Hà Nội, Việt Nam"));
             }
         }
 
@@ -124,6 +116,27 @@ namespace LibraryManagementSystem
         {
             books.Add(book);
             NotifyBookChanged(book);
+        }
+
+        // Method to remove a book
+        public void RemoveBook(string bookId)
+        {
+            Book bookToRemove = null;
+
+            foreach (Book book in books)
+            {
+                if (book.Id == bookId)
+                {
+                    bookToRemove = book;
+                    break;
+                }
+            }
+
+            if (bookToRemove != null)
+            {
+                books.Remove(bookToRemove);
+                NotifyBookChanged(bookToRemove);
+            }
         }
 
         // Method to find a book
@@ -159,7 +172,6 @@ namespace LibraryManagementSystem
             return false; // Email chưa được đăng ký
         }
 
-
         // Method to find a user
         public User FindUser(string email, string password)
         {
@@ -174,6 +186,22 @@ namespace LibraryManagementSystem
             return null;
         }
 
+        // Method to get all available books
+        public List<Book> GetAvailableBooks()
+        {
+            List<Book> availableBooks = new List<Book>();
+
+            foreach (Book book in books)
+            {
+                if (book.Available)
+                {
+                    availableBooks.Add(book);
+                }
+            }
+
+            return availableBooks;
+        }
+
         // Method to get borrowed books (only currently borrowed books)
         public List<Book> GetBorrowedBooks()
         {
@@ -181,7 +209,7 @@ namespace LibraryManagementSystem
 
             if (currentUser != null)
             {
-                foreach (BorrowHistory borrow in currentUser.CurrentlyBorrowedBooks)
+                foreach (BorrowHistory borrow in currentUser.BorrowHistory)
                 {
                     if (!borrow.Returned)
                     {
@@ -218,17 +246,36 @@ namespace LibraryManagementSystem
             return result;
         }
 
-        // Method to search books
-        public List<Book> SearchBooks(string query)
+        // Method to search books with search type
+        public List<Book> SearchBooks(string query, string searchType = "Tất cả")
         {
             List<Book> results = new List<Book>();
             string lowercaseQuery = query.ToLower();
 
             foreach (Book book in books)
             {
-                if (book.Title.ToLower().Contains(lowercaseQuery) ||
-                    book.Author.ToLower().Contains(lowercaseQuery) ||
-                    book.Genre.ToLower().Contains(lowercaseQuery))
+                bool match = false;
+
+                switch (searchType)
+                {
+                    case "Tên sách":
+                        match = book.Title.ToLower().Contains(lowercaseQuery);
+                        break;
+                    case "Tác giả":
+                        match = book.Author.ToLower().Contains(lowercaseQuery);
+                        break;
+                    case "Thể loại":
+                        match = book.Genre.ToLower().Contains(lowercaseQuery);
+                        break;
+                    default: // "Tất cả"
+                        match = book.Title.ToLower().Contains(lowercaseQuery) ||
+                                book.Author.ToLower().Contains(lowercaseQuery) ||
+                                book.Genre.ToLower().Contains(lowercaseQuery) ||
+                                book.Description.ToLower().Contains(lowercaseQuery);
+                        break;
+                }
+
+                if (match)
                 {
                     results.Add(book);
                 }
@@ -237,6 +284,7 @@ namespace LibraryManagementSystem
             return results;
         }
 
+        // Method to reset all book statuses
         public void ResetBookStatus()
         {
             foreach (Book book in Books)

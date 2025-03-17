@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text.Json;
 using System.Windows.Forms;
 
@@ -73,7 +72,16 @@ namespace LibraryManagementSystem
                     if (libraryData.CurrentUser != null)
                     {
                         // Tìm user có trong danh sách Users thay vì sử dụng trực tiếp CurrentUser từ JSON
-                        User savedUser = Library.Instance.Users.FirstOrDefault(u => u.Email == libraryData.CurrentUser.Email);
+                        User savedUser = null;
+                        foreach (var user in Library.Instance.Users)
+                        {
+                            if (user.Email == libraryData.CurrentUser.Email)
+                            {
+                                savedUser = user;
+                                break;
+                            }
+                        }
+
                         if (savedUser != null)
                         {
                             Library.Instance.CurrentUser = savedUser;

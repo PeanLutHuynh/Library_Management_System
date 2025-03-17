@@ -2,7 +2,6 @@
 using System.Drawing;
 using System.Windows.Forms;
 using System.Globalization;
-using System.Collections.Generic;
 
 namespace LibraryManagementSystem
 {
@@ -67,12 +66,12 @@ namespace LibraryManagementSystem
             this.lblTitle.Location = new Point(20, 20);
             this.lblTitle.Size = new Size(400, 40);
 
-            //// Subtitle
-            //this.lblSubtitle = new Label();
-            //this.lblSubtitle.Text = "Quản lý thông tin cá nhân và xem lịch sử mượn sách";
-            //this.lblSubtitle.Font = new Font("Arial", 12);
-            //this.lblSubtitle.Location = new Point(20, 60);
-            //this.lblSubtitle.Size = new Size(400, 20);
+            // Subtitle
+            this.lblSubtitle = new Label();
+            this.lblSubtitle.Text = "Quản lý thông tin cá nhân và xem lịch sử mượn sách";
+            this.lblSubtitle.Font = new Font("Arial", 12);
+            this.lblSubtitle.Location = new Point(20, 60);
+            this.lblSubtitle.Size = new Size(400, 20);
 
             // TabControl
             this.tabControl.Location = new Point(20, 90);
@@ -209,9 +208,9 @@ namespace LibraryManagementSystem
         {
             historyPanel.Controls.Clear();
 
-            if (Library.Instance.CurrentUser != null /*&& Library.Instance.CurrentUser.BorrowHistory != null*/)
+            if (Library.Instance.CurrentUser != null && Library.Instance.CurrentUser.BorrowHistory != null)
             {
-                List<BorrowHistory> history = Library.Instance.CurrentUser.BorrowHistory;
+                var history = Library.Instance.CurrentUser.BorrowHistory;
 
                 if (history.Count == 0)
                 {

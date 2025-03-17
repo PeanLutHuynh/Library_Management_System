@@ -15,10 +15,10 @@ namespace LibraryManagementSystem
         private int pages;
         private string description;
         private bool available;
+        private DateTime? dueDate;
         private int borrowCount;
         private string coverImage;
-        private DateTime? dueDate;
-        
+
         // Properties
         public string Id
         {
@@ -62,12 +62,6 @@ namespace LibraryManagementSystem
             set { pages = value; }
         }
 
-        public int BorrowCount
-        {
-            get { return borrowCount; }
-            set { borrowCount = value; }
-        }
-
         public string Description
         {
             get { return description; }
@@ -80,20 +74,26 @@ namespace LibraryManagementSystem
             set { available = value; }
         }
 
-        public string CoverImage
-        {
-            get { return coverImage; }
-            set { coverImage = value; }
-        }
-
         public DateTime? DueDate
         {
             get { return dueDate; }
             set { dueDate = value; }
         }
 
+        public int BorrowCount
+        {
+            get { return borrowCount; }
+            set { borrowCount = value; }
+        }
+
+        public string CoverImage
+        {
+            get { return coverImage; }
+            set { coverImage = value; }
+        }
+
         // Constructor
-        public Book(string id, string title, string author, int year, string genre, string publisher, int pages, int borrowCount, string description)
+        public Book(string id, string title, string author, int year, string genre, string publisher, int pages, string description, int borrowCount = 0)
         {
             this.id = id;
             this.title = title;
@@ -102,11 +102,28 @@ namespace LibraryManagementSystem
             this.genre = genre;
             this.publisher = publisher;
             this.pages = pages;
-            this.borrowCount = borrowCount;
             this.description = description;
             this.available = true;
-            this.coverImage = null;
             this.dueDate = null;
+            this.borrowCount = borrowCount;
+            this.coverImage = null;
+        }
+
+        // Default constructor for serialization
+        public Book()
+        {
+            this.id = "";
+            this.title = "";
+            this.author = "";
+            this.year = 0;
+            this.genre = "";
+            this.publisher = "";
+            this.pages = 0;
+            this.description = "";
+            this.available = true;
+            this.dueDate = null;
+            this.borrowCount = 0;
+            this.coverImage = null;
         }
     }
 }

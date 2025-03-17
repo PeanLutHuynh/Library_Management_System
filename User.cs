@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Windows.Forms;
 
 namespace LibraryManagementSystem
@@ -172,7 +171,15 @@ namespace LibraryManagementSystem
         // Method to return a book
         public string ReturnBook(Book book)
         {
-            BorrowHistory borrow = BorrowHistory.FirstOrDefault(b => b.Book.Id == book.Id && !b.Returned);
+            BorrowHistory borrow = null;
+            foreach (var b in BorrowHistory)
+            {
+                if (b.Book.Id == book.Id && !b.Returned)
+                {
+                    borrow = b;
+                    break;
+                }
+            }
             if (borrow == null)
             {
                 return "Không tìm thấy thông tin mượn cho sách này.";
