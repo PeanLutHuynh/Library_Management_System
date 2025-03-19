@@ -4,7 +4,6 @@ using System.Windows.Forms;
 
 namespace LibraryManagementSystem
 {
-    // Thẻ kết quả tìm kiếm với thiết kế giống giao diện web
     public class SearchResultCard : Panel
     {
         private Book book;
@@ -34,33 +33,12 @@ namespace LibraryManagementSystem
 
             // SearchResultCard
             this.Size = new Size(840, 160);
+            this.MinimumSize = new Size(600, 160);
             this.BorderStyle = BorderStyle.None;
             this.Margin = new Padding(15);
             this.BackColor = Color.White;
             this.Padding = new Padding(15);
-            // Thêm đổ bóng cho thẻ kết quả tìm kiếm
-            this.Paint += (sender, e) => {
-                var panel = sender as Panel;
-                var rect = new Rectangle(0, 0, panel.Width, panel.Height);
-                using (var path = new System.Drawing.Drawing2D.GraphicsPath())
-                {
-                    path.AddRoundedRectangle(rect, 10);
-                    panel.Region = new Region(path);
-
-                    // Vẽ đổ bóng
-                    var shadowRect = new Rectangle(0, 0, panel.Width, panel.Height);
-                    using (var brush = new SolidBrush(Color.FromArgb(20, 0, 0, 0)))
-                    {
-                        e.Graphics.FillRoundedRectangle(brush, shadowRect, 10);
-                    }
-
-                    // Vẽ viền
-                    using (var pen = new Pen(Color.FromArgb(229, 231, 235), 1))
-                    {
-                        e.Graphics.DrawRoundedRectangle(pen, rect, 10);
-                    }
-                }
-            };
+            this.Anchor = AnchorStyles.Right|AnchorStyles.Top;
 
             // picCover
             this.picCover.Size = new Size(110, 130);
@@ -91,6 +69,7 @@ namespace LibraryManagementSystem
             this.lblTitle.Location = new Point(140, 15);
             this.lblTitle.Size = new Size(500, 25);
             this.lblTitle.ForeColor = Color.FromArgb(17, 24, 39);
+            this.lblTitle.Anchor = AnchorStyles.Left | AnchorStyles.Top | AnchorStyles.Right;
 
             // lblAuthor
             this.lblAuthor.Text = book.Author;
@@ -98,6 +77,7 @@ namespace LibraryManagementSystem
             this.lblAuthor.Location = new Point(140, 45);
             this.lblAuthor.Size = new Size(500, 20);
             this.lblAuthor.ForeColor = Color.FromArgb(107, 114, 128);
+            this.lblAuthor.Anchor = AnchorStyles.Left | AnchorStyles.Top | AnchorStyles.Right;
 
             // lblGenre
             this.lblGenre.Text = book.Genre;
@@ -114,15 +94,17 @@ namespace LibraryManagementSystem
             this.lblStatus.ForeColor = book.Available ? Color.Green : Color.Red;
 
             // lblDescription
-            this.lblDescription.Text = book.Description.Length > 150 ? book.Description.Substring(0, 150) + "..." : book.Description;
+            this.lblDescription.Text = book.Description/*Length > 150 ? book.Description.Substring(0, 150) + "..." : book.Description*/;
             this.lblDescription.Font = new Font("Segoe UI", 9);
             this.lblDescription.Location = new Point(140, 95);
-            this.lblDescription.Size = new Size(600, 50);
+            this.lblDescription.AutoSize = false;
+            this.lblDescription.AutoEllipsis = true;
             this.lblDescription.ForeColor = Color.FromArgb(107, 114, 128);
+            this.lblDescription.Anchor = AnchorStyles.Left | AnchorStyles.Top | AnchorStyles.Right;
+            this.lblDescription.Size = new Size(this.Width - 270, 50);
 
             // btnDetails
             this.btnDetails.Text = "Chi tiết";
-            this.btnDetails.Location = new Point(730, 65);
             this.btnDetails.Size = new Size(100, 35);
             this.btnDetails.FlatStyle = FlatStyle.Flat;
             this.btnDetails.Font = new Font("Segoe UI", 10, FontStyle.Bold);
@@ -130,16 +112,8 @@ namespace LibraryManagementSystem
             this.btnDetails.ForeColor = Color.White;
             this.btnDetails.Cursor = Cursors.Hand;
             this.btnDetails.Click += new EventHandler(this.btnDetails_Click);
-            // Bo góc cho nút chi tiết
-            this.btnDetails.Paint += (sender, e) => {
-                var button = sender as Button;
-                var path = new System.Drawing.Drawing2D.GraphicsPath();
-                path.AddArc(0, 0, 15, 15, 180, 90);
-                path.AddArc(button.Width - 15, 0, 15, 15, 270, 90);
-                path.AddArc(button.Width - 15, button.Height - 15, 15, 15, 0, 90);
-                path.AddArc(0, button.Height - 15, 15, 15, 90, 90);
-                button.Region = new Region(path);
-            };
+            this.btnDetails.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            this.btnDetails.Location = new Point(this.Width - 130, 15);
 
             // Add controls
             this.Controls.Add(this.picCover);
@@ -158,4 +132,3 @@ namespace LibraryManagementSystem
         }
     }
 }
-

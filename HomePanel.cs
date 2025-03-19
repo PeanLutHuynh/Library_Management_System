@@ -224,7 +224,7 @@ namespace LibraryManagementSystem
             {
                 EnhancedBookCard bookCard = new EnhancedBookCard(book);
                 popularBooksPanel.Controls.Add(bookCard);
-                bookCard.Margin = new Padding(30); // Tăng khoảng cách giữa các sách
+                bookCard.Margin = new Padding(31); // Tăng khoảng cách giữa các sách
             }
             if (Library.Instance.CurrentUser != null)
             {

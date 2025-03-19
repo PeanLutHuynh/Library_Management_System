@@ -13,6 +13,7 @@ namespace LibraryManagementSystem
         private Button btnSearch;
         private FlowLayoutPanel resultsPanel;
         private ComboBox cmbSearchType;
+        private Panel searchInputPanel;
 
         public SearchPanel()
         {
@@ -27,24 +28,32 @@ namespace LibraryManagementSystem
             this.btnSearch = new Button();
             this.resultsPanel = new FlowLayoutPanel();
             this.cmbSearchType = new ComboBox();
+            this.searchInputPanel = new Panel();
 
-            // lblTitle
+            // SearchPanel
+            this.Dock = DockStyle.Fill;
+            this.AutoScroll = true;
+            this.Padding = new Padding(20);
+
+            // lblTitle - Moved down and font size reduced
             this.lblTitle.Text = "Tìm kiếm sách";
-            this.lblTitle.Font = new Font("Arial", 24, FontStyle.Bold);
-            this.lblTitle.Location = new Point(20, 20);
-            this.lblTitle.Size = new Size(400, 40);
+            this.lblTitle.Font = new Font("Arial", 20, FontStyle.Bold); // Reduced from 24 to 20
+            this.lblTitle.Size = new Size(400, 35); // Reduced height
+            this.lblTitle.Location = new Point(20, 55); // Moved down to Y=50
+            this.lblTitle.Anchor = AnchorStyles.Top | AnchorStyles.Left;
 
-            // lblSubtitle
+            // lblSubtitle - Adjusted position
             this.lblSubtitle.Text = "Tìm kiếm sách theo tên, tác giả hoặc thể loại";
             this.lblSubtitle.Font = new Font("Arial", 10);
             this.lblSubtitle.ForeColor = Color.Gray;
-            this.lblSubtitle.Location = new Point(20, 60);
             this.lblSubtitle.Size = new Size(400, 20);
+            this.lblSubtitle.Location = new Point(20, 95); // Adjusted below title
+            this.lblSubtitle.Anchor = AnchorStyles.Top | AnchorStyles.Left;
 
-            // Search Panel
-            Panel searchInputPanel = new Panel();
-            searchInputPanel.Location = new Point(20, 90);
-            searchInputPanel.Size = new Size(860, 50);
+            // Search Panel - Adjusted position
+            this.searchInputPanel.Location = new Point(20, 120); // Positioned below subtitle
+            this.searchInputPanel.Size = new Size(860, 50);
+            this.searchInputPanel.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
 
             // txtSearch
             this.txtSearch.Location = new Point(0, 10);
@@ -53,13 +62,15 @@ namespace LibraryManagementSystem
             this.txtSearch.BorderStyle = BorderStyle.FixedSingle;
             this.txtSearch.Padding = new Padding(5);
             this.txtSearch.KeyDown += new KeyEventHandler(this.txtSearch_KeyDown);
+            this.txtSearch.Anchor = AnchorStyles.Left | AnchorStyles.Top;
 
             // cmbSearchType
-            this.cmbSearchType.Location = new Point(410, 10);
+            this.cmbSearchType.Location = new Point(410, 13);
             this.cmbSearchType.Size = new Size(150, 30);
             this.cmbSearchType.DropDownStyle = ComboBoxStyle.DropDownList;
             this.cmbSearchType.Items.AddRange(new object[] { "Tất cả", "Tên sách", "Tác giả", "Thể loại" });
             this.cmbSearchType.SelectedIndex = 0;
+            this.cmbSearchType.Anchor = AnchorStyles.Left | AnchorStyles.Top;
 
             // btnSearch
             this.btnSearch.Text = "Tìm kiếm";
@@ -69,22 +80,37 @@ namespace LibraryManagementSystem
             this.btnSearch.ForeColor = Color.White;
             this.btnSearch.FlatStyle = FlatStyle.Flat;
             this.btnSearch.Click += new EventHandler(this.btnSearch_Click);
+            this.btnSearch.Anchor = AnchorStyles.Left | AnchorStyles.Top;
 
             // Add controls to search panel
-            searchInputPanel.Controls.Add(this.txtSearch);
-            searchInputPanel.Controls.Add(this.cmbSearchType);
-            searchInputPanel.Controls.Add(this.btnSearch);
+            this.searchInputPanel.Controls.Add(this.txtSearch);
+            this.searchInputPanel.Controls.Add(this.cmbSearchType);
+            this.searchInputPanel.Controls.Add(this.btnSearch);
 
-            // resultsPanel
-            this.resultsPanel.Location = new Point(20, 150);
+            // resultsPanel - Positioned and sized to fill remaining space
+            this.resultsPanel.Location = new Point(20, 180); // Below search input
             this.resultsPanel.Size = new Size(860, 430);
             this.resultsPanel.AutoScroll = true;
+            this.resultsPanel.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            this.resultsPanel.FlowDirection = FlowDirection.TopDown;
+            this.resultsPanel.WrapContents = false;
 
-            // SearchPanel
+            // Add all controls to the main panel
             this.Controls.Add(this.lblTitle);
             this.Controls.Add(this.lblSubtitle);
-            this.Controls.Add(searchInputPanel);
+            this.Controls.Add(this.searchInputPanel);
             this.Controls.Add(this.resultsPanel);
+
+            // Add resize handler
+            this.Resize += new EventHandler(this.SearchPanel_Resize);
+        }
+
+        private void SearchPanel_Resize(object sender, EventArgs e)
+        {
+            // Ensure proper sizing of panels when form is resized
+            this.searchInputPanel.Width = this.ClientSize.Width - 40; // 40 for left and right padding
+            this.resultsPanel.Width = this.ClientSize.Width - 40;
+            this.resultsPanel.Height = this.ClientSize.Height - this.resultsPanel.Top - 20; // 20 for bottom padding
         }
 
         private void txtSearch_KeyDown(object sender, KeyEventArgs e)
@@ -116,9 +142,9 @@ namespace LibraryManagementSystem
                 Label lblNoResults = new Label();
                 lblNoResults.Text = $"Không tìm thấy kết quả nào phù hợp với từ khóa \"{query}\"";
                 lblNoResults.Font = new Font("Arial", 12);
-                lblNoResults.Location = new Point(0, 0);
-                lblNoResults.Size = new Size(860, 30);
+                lblNoResults.Size = new Size(resultsPanel.Width - 20, 30);
                 lblNoResults.TextAlign = ContentAlignment.MiddleCenter;
+                lblNoResults.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
                 resultsPanel.Controls.Add(lblNoResults);
             }
             else
@@ -126,13 +152,15 @@ namespace LibraryManagementSystem
                 Label lblResultCount = new Label();
                 lblResultCount.Text = $"Tìm thấy {results.Count} kết quả cho \"{query}\"";
                 lblResultCount.Font = new Font("Arial", 12, FontStyle.Bold);
-                lblResultCount.Location = new Point(0, 0);
-                lblResultCount.Size = new Size(860, 30);
+                lblResultCount.Size = new Size(resultsPanel.Width - 20, 30);
+                lblResultCount.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
                 resultsPanel.Controls.Add(lblResultCount);
 
                 foreach (Book book in results)
                 {
                     SearchResultCard bookCard = new SearchResultCard(book);
+                    bookCard.Width = resultsPanel.Width - 40; // Adjust width to fit panel with margins
+                    bookCard.Margin = new Padding(10, 15, 10, 15); // Increased vertical margins
                     resultsPanel.Controls.Add(bookCard);
                 }
             }

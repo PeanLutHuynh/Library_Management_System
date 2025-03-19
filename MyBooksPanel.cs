@@ -37,8 +37,10 @@ namespace LibraryManagementSystem
 
             // borrowedBooksPanel
             this.borrowedBooksPanel.Location = new Point(20, 90);
-            this.borrowedBooksPanel.Size = new Size(860, 480);
+            this.borrowedBooksPanel.Size = new Size(this.ClientSize.Width - 40, this.ClientSize.Height - 110);
             this.borrowedBooksPanel.AutoScroll = true;
+            this.borrowedBooksPanel.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            this.borrowedBooksPanel.Padding = new Padding(0, 0, 20, 0); // Add right padding for scrollbar
 
             // MyBooksPanel
             this.Controls.Add(this.lblTitle);

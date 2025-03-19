@@ -45,14 +45,6 @@ namespace LibraryManagementSystem
                 {
                     path.AddRoundedRectangle(rect, 10);
                     panel.Region = new Region(path);
-
-                    // Vẽ đổ bóng
-                    //var shadowRect = new Rectangle(0, 0, panel.Width, panel.Height);
-                    //using (var brush = new SolidBrush(Color.FromArgb(20, 0, 0, 0)))
-                    //{
-                    //    e.Graphics.FillRoundedRectangle(brush, shadowRect, 10);
-                    //}
-
                     // Vẽ viền
                     using (var pen = new Pen(Color.FromArgb(229, 231, 235), 1))
                     {
