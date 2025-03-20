@@ -142,21 +142,21 @@ namespace LibraryManagementSystem
         }
 
         // Default constructor for serialization
-        //    public Book()
-        //    {
-        //        this.id = "";
-        //        this.title = "";
-        //        this.author = "";
-        //        this.year = 0;
-        //        this.genre = "";
-        //        this.publisher = "";
-        //        this.pages = 0;
-        //        this.description = "";
-        //        this.available = true;
-        //        this.dueDate = null;
-        //        this.borrowCount = 0;
-        //        this.coverImage = null;
-        //    }
+        public Book() : base("", "", "", 0, "", "", 0, "", 0)
+        {
+            this.id = "";
+            this.title = "";
+            this.author = "";
+            this.year = 0;
+            this.genre = "";
+            this.publisher = "";
+            this.pages = 0;
+            this.description = "";
+            this.available = true;
+            this.dueDate = null;
+            this.borrowCount = 0;
+            this.coverImage = null;
+        }
 
         // Implementing the abstract method from LibraryItem
         public override void DisplayInfo()
