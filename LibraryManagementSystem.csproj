@@ -80,6 +80,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="abstract_LibraryItem.cs" />
     <Compile Include="Book.cs" />
     <Compile Include="BookDetailForm.cs">
       <SubType>Form</SubType>

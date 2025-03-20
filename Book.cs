@@ -4,7 +4,7 @@ using System.IO;
 namespace LibraryManagementSystem
 {
     [Serializable]
-    public class Book
+    public class Book : LibraryItem
     {
         // Fields
         private string id;
@@ -124,7 +124,8 @@ namespace LibraryManagementSystem
         }
 
         // Constructor
-        public Book(string id, string title, string author, int year, string genre, string publisher, int pages, string description, int borrowCount = 0)
+        public Book(string id, string title, string author, int year, string genre, string publisher, int pages, string description, int borrowCount)
+            : base(id, title, author, year, genre, publisher, pages, description, borrowCount)
         {
             this.id = id;
             this.title = title;
@@ -141,20 +142,37 @@ namespace LibraryManagementSystem
         }
 
         // Default constructor for serialization
-        public Book()
+        //    public Book()
+        //    {
+        //        this.id = "";
+        //        this.title = "";
+        //        this.author = "";
+        //        this.year = 0;
+        //        this.genre = "";
+        //        this.publisher = "";
+        //        this.pages = 0;
+        //        this.description = "";
+        //        this.available = true;
+        //        this.dueDate = null;
+        //        this.borrowCount = 0;
+        //        this.coverImage = null;
+        //    }
+
+        // Implementing the abstract method from LibraryItem
+        public override void DisplayInfo()
         {
-            this.id = "";
-            this.title = "";
-            this.author = "";
-            this.year = 0;
-            this.genre = "";
-            this.publisher = "";
-            this.pages = 0;
-            this.description = "";
-            this.available = true;
-            this.dueDate = null;
-            this.borrowCount = 0;
-            this.coverImage = null;
+            Console.WriteLine($"ID: {Id}");
+            Console.WriteLine($"Title: {Title}");
+            Console.WriteLine($"Author: {Author}");
+            Console.WriteLine($"Year: {Year}");
+            Console.WriteLine($"Genre: {Genre}");
+            Console.WriteLine($"Publisher: {Publisher}");
+            Console.WriteLine($"Pages: {Pages}");
+            Console.WriteLine($"Description: {Description}");
+            Console.WriteLine($"Available: {Available}");
+            Console.WriteLine($"Due Date: {DueDate}");
+            Console.WriteLine($"Borrow Count: {BorrowCount}");
+            Console.WriteLine($"Cover Image: {CoverImage}");
         }
     }
 }
