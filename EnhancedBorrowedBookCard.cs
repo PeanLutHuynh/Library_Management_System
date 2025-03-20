@@ -4,7 +4,6 @@ using System.Windows.Forms;
 
 namespace LibraryManagementSystem
 {
-    // Thẻ sách đang mượn cải tiến với thiết kế giống giao diện web
     public class EnhancedBorrowedBookCard : Panel
     {
         private Book book;
@@ -20,6 +19,17 @@ namespace LibraryManagementSystem
         {
             this.book = book;
             InitializeComponent();
+            this.Resize += EnhancedBorrowedBookCard_Resize;
+        }
+
+        private void EnhancedBorrowedBookCard_Resize(object sender, EventArgs e)
+        {
+            // Update the position of the buttons when the form is resized
+            if (btnReturn != null && btnDetails != null)
+            {
+                btnReturn.Location = new Point(this.ClientSize.Width - 120, 115);
+                btnDetails.Location = new Point(this.ClientSize.Width - 240, 115);
+            }
         }
 
         private void InitializeComponent()
@@ -33,23 +43,23 @@ namespace LibraryManagementSystem
             this.btnDetails = new Button();
 
             // BorrowedBookCard
-            this.Size = new Size(1400, 160);
+            this.MinimumSize = new Size(600, 160);
+            this.Height = 160; // Chiều cao cố định
+            this.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             this.BorderStyle = BorderStyle.None;
             this.Margin = new Padding(15);
             this.BackColor = Color.White;
             this.Padding = new Padding(15);
-            this.MinimumSize = new Size(600, 160);
-            this.BackColor = Color.White;
 
             // picCover
             this.picCover.Size = new Size(110, 130);
             this.picCover.Location = new Point(15, 15);
             this.picCover.BackColor = Color.FromArgb(243, 244, 246);
             this.picCover.SizeMode = PictureBoxSizeMode.Zoom;
-            // Bo góc cho hình ảnh
+            // Rounded corners for picCover
             this.picCover.Paint += (sender, e) => {
-                var pic = sender as PictureBox;
-                var path = new System.Drawing.Drawing2D.GraphicsPath();
+                PictureBox pic = sender as PictureBox;
+                System.Drawing.Drawing2D.GraphicsPath path = new System.Drawing.Drawing2D.GraphicsPath();
                 path.AddArc(0, 0, 15, 15, 180, 90);
                 path.AddArc(pic.Width - 15, 0, 15, 15, 270, 90);
                 path.AddArc(pic.Width - 15, pic.Height - 15, 15, 15, 0, 90);
@@ -57,7 +67,7 @@ namespace LibraryManagementSystem
                 pic.Region = new Region(path);
             };
 
-            // Tải ảnh bìa sách sử dụng ResourceManager
+            // Load book cover
             Image coverImage = ResourceManager.LoadBookCoverById(book.Id);
             if (coverImage != null)
             {
@@ -84,7 +94,7 @@ namespace LibraryManagementSystem
             if (Library.Instance.CurrentUser != null && Library.Instance.CurrentUser.BorrowHistory != null)
             {
                 BorrowHistory borrow = null;
-                foreach (var b in Library.Instance.CurrentUser.BorrowHistory)
+                foreach (BorrowHistory b in Library.Instance.CurrentUser.BorrowHistory)
                 {
                     if (b.Book.Id == book.Id && !b.Returned)
                     {
@@ -134,7 +144,7 @@ namespace LibraryManagementSystem
             this.btnReturn.ForeColor = Color.White;
             this.btnReturn.Cursor = Cursors.Hand;
             this.btnReturn.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            this.btnReturn.Location = new Point(this.Width - 120, 115);
+            this.btnReturn.Location = new Point(this.ClientSize.Width - 120, 115);
             this.btnReturn.Click += new EventHandler(this.btnReturn_Click);
 
             // btnDetails
@@ -145,7 +155,7 @@ namespace LibraryManagementSystem
             this.btnDetails.BackColor = Color.FromArgb(37, 99, 235);
             this.btnDetails.ForeColor = Color.White;
             this.btnDetails.Cursor = Cursors.Hand;
-            this.btnDetails.Anchor = AnchorStyles.Top | AnchorStyles.Right; // Must include Top anchor as well
+            this.btnDetails.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             this.btnDetails.Location = new Point(this.ClientSize.Width - 240, 115);
             this.btnDetails.Click += new EventHandler(this.btnDetails_Click);
 
@@ -192,4 +202,3 @@ namespace LibraryManagementSystem
         }
     }
 }
-

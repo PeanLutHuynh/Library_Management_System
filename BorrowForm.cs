@@ -145,7 +145,7 @@ namespace LibraryManagementSystem
 
         private void btnBorrow_Click(object sender, EventArgs e)
         {
-            // Kiểm tra đăng nhập
+            // Check if user is logged in
             if (Library.Instance.CurrentUser == null)
             {
                 DialogResult result = MessageBox.Show("Bạn cần đăng nhập để mượn sách. Bạn có muốn đăng nhập ngay bây giờ không?",
@@ -153,16 +153,16 @@ namespace LibraryManagementSystem
 
                 if (result == DialogResult.Yes)
                 {
-                    // Hiển thị form đăng nhập
+                    // Show login form
                     LoginForm loginForm = new LoginForm();
                     if (loginForm.ShowDialog() == DialogResult.OK)
                     {
-                        // Nếu đăng nhập thành công, tiếp tục mượn sách
+                        // If login successful, proceed to borrow book
                         ProcessBorrowBook();
                     }
                     else
                     {
-                        // Nếu không đăng nhập, đóng form mượn sách
+                        // If login failed, close the form
                         this.DialogResult = DialogResult.Cancel;
                         this.Close();
                     }
@@ -194,7 +194,7 @@ namespace LibraryManagementSystem
             MessageBox.Show($"Chúc mừng! {message}\nVui lòng đến thư viện vào ngày {borrowDate.ToString("dd/MM/yyyy")} để nhận sách.",
                 "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-            // Cập nhật giao diện
+            // Update all panels
             if (MainForm.FormManager.MainForm != null)
             {
                 MainForm.FormManager.MainForm.Invoke((MethodInvoker)delegate

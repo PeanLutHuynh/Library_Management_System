@@ -14,10 +14,10 @@ namespace LibraryManagementSystem
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            // Khởi tạo thư viện sử dụng Singleton pattern
+            // Create an instance of Library
             Library.Instance.Initialize();
 
-            // Hiển thị form chính
+            // Start the application with MainForm
             Application.Run(new MainForm());
         }
     }

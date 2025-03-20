@@ -45,14 +45,14 @@ namespace LibraryManagementSystem
             this.featuresTable = new TableLayoutPanel();
 
             // Hero Section
-            this.heroSection.BackColor = Color.FromArgb(37, 99, 235); // Blue color
+            this.heroSection.BackColor = Color.FromArgb(37, 99, 235);
             this.heroSection.Dock = DockStyle.Top;
             this.heroSection.Height = 250;
             this.heroSection.Padding = new Padding(20);
 
             // Title
             this.lblTitle.Text = "Thư Viện Trực Tuyến";
-            this.lblTitle.Font = new Font("Arial", 28, FontStyle.Bold);
+            this.lblTitle.Font = new Font("Arial", 26, FontStyle.Bold);
             this.lblTitle.ForeColor = Color.White;
             this.lblTitle.TextAlign = ContentAlignment.MiddleCenter;
             this.lblTitle.Size = new Size(860, 40);
@@ -94,7 +94,7 @@ namespace LibraryManagementSystem
             this.btnLogin.ForeColor = Color.White;
             this.btnLogin.Font = new Font("Arial", 10, FontStyle.Bold);
             this.btnLogin.Size = new Size(120, 35);
-            this.btnLogin.Location = new Point(this.btnViewBooks.Right + 18, 0); // Đặt bên phải btnViewBooks với khoảng cách 10px
+            this.btnLogin.Location = new Point(this.btnViewBooks.Right + 18, 0); 
             this.btnLogin.FlatStyle = FlatStyle.Flat;
             this.btnLogin.Click += new EventHandler(this.btnLogin_Click);
 
@@ -141,28 +141,27 @@ namespace LibraryManagementSystem
             // Features Table
             this.featuresTable.ColumnCount = 3;
             this.featuresTable.RowCount = 1;
-            this.featuresTable.Size = new Size(this.featuresSection.Width - 40, 150); // Lấp đầy khung
+            this.featuresTable.Size = new Size(this.featuresSection.Width - 40, 150); 
             this.featuresTable.Location = new Point((this.featuresSection.Width - this.featuresTable.Width) / 2, 70);
             this.featuresTable.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
 
-            // Đặt mỗi cột chiếm 1/3 chiều rộng bảng
+            // Resize columns
             for (int i = 0; i < this.featuresTable.ColumnCount; i++)
             {
                 this.featuresTable.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.33f));
             }
 
-
             this.Resize += (sender, e) =>
             {
-                // Cập nhật vị trí Features Section
+                // Resize hero section
                 this.featuresSection.Size = new Size(this.ClientSize.Width, 250);
                 this.featuresSection.Location = new Point(0, this.popularBooksPanel.Bottom + 50);
 
-                // Cập nhật lại tiêu đề Features Title
+                // Update lblFeaturesTitle
                 this.lblFeaturesTitle.Size = new Size(this.featuresSection.Width, 30);
                 this.lblFeaturesTitle.Location = new Point((this.featuresSection.Width - this.lblFeaturesTitle.Width) / 2, 20);
 
-                // Cập nhật lại Features Table
+                // Update features table
                 this.featuresTable.Size = new Size(this.ClientSize.Width - 100, 150);
                 this.featuresTable.Location = new Point((this.featuresSection.Width - this.featuresTable.Width) / 2, 70);
             };
@@ -190,20 +189,20 @@ namespace LibraryManagementSystem
         private void AddFeature(TableLayoutPanel table, int column, string title, string description)
         {
             Panel featurePanel = new Panel();
-            featurePanel.Dock = DockStyle.Fill; // Chiếm toàn bộ cột
+            featurePanel.Dock = DockStyle.Fill;
             featurePanel.BackColor = Color.White;
             featurePanel.Padding = new Padding(15);
 
             Label lblFeatureTitle = new Label();
             lblFeatureTitle.Text = title;
             lblFeatureTitle.Font = new Font("Arial", 14, FontStyle.Bold);
-            lblFeatureTitle.Dock = DockStyle.Top; // Căn giữa trên
+            lblFeatureTitle.Dock = DockStyle.Top; 
             lblFeatureTitle.TextAlign = ContentAlignment.MiddleCenter;
 
             Label lblFeatureDesc = new Label();
             lblFeatureDesc.Text = description;
             lblFeatureDesc.Font = new Font("Arial", 10);
-            lblFeatureDesc.Dock = DockStyle.Fill; // Giãn toàn bộ phần còn lại
+            lblFeatureDesc.Dock = DockStyle.Fill; 
             lblFeatureDesc.ForeColor = Color.Gray;
             lblFeatureDesc.TextAlign = ContentAlignment.MiddleCenter;
 
@@ -224,12 +223,12 @@ namespace LibraryManagementSystem
             {
                 EnhancedBookCard bookCard = new EnhancedBookCard(book);
                 popularBooksPanel.Controls.Add(bookCard);
-                bookCard.Margin = new Padding(31); // Tăng khoảng cách giữa các sách
+                bookCard.Margin = new Padding(31); 
             }
             if (Library.Instance.CurrentUser != null)
             {
                 this.btnLogin.Enabled = false;
-                this.btnLogin.BackColor = Color.Gray;
+                this.btnLogin.Text = "Đã Đăng Nhập";
             }
         }
 
@@ -250,7 +249,7 @@ namespace LibraryManagementSystem
         }
     }
 
-    // Lớp PopularBookCard chỉ được sử dụng trong HomePanel
+    // PopularBookCard class
     public class PopularBookCard : Panel
     {
         private Book book;
@@ -285,10 +284,10 @@ namespace LibraryManagementSystem
             // Borrow Count Badge
             this.lblBorrowCount.Text = $"{book.BorrowCount} lượt mượn";
             this.lblBorrowCount.Font = new Font("Arial", 8, FontStyle.Bold);
-            this.lblBorrowCount.ForeColor = Color.White;
+            this.lblBorrowCount.ForeColor = Color.Blue;
             this.lblBorrowCount.BackColor = Color.FromArgb(37, 99, 235);
             this.lblBorrowCount.Size = new Size(80, 20);
-            this.lblBorrowCount.Location = new Point(this.Width - 90, 5); // Căn góc phải trên
+            this.lblBorrowCount.Location = new Point(this.Width - 90, 5); 
 
             // picCover
             this.picCover.Size = new Size(180, 140);

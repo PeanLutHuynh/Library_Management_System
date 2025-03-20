@@ -10,14 +10,14 @@ namespace LibraryManagementSystem
         private Panel navbarPanel;
         private Panel contentPanel;
 
-        // Các tab
+        // TabPanel
         private HomePanel homePanel;
         private BooksPanel booksPanel;
         private SearchPanel searchPanel;
         private MyBooksPanel myBooksPanel;
         private ProfilePanel profilePanel;
 
-        // Các button trên navbar
+        // Buttons and labels
         private Button btnHome;
         private Button btnBooks;
         private Button btnSearch;
@@ -36,16 +36,18 @@ namespace LibraryManagementSystem
         public MainForm()
         {
             InitializeComponent();
-            // Đảm bảo thư mục tài nguyên tồn tại
+            // Asure that the resource directories are created
             ResourceManager.EnsureResourceDirectories();
             InitializePanels();
-            // Lưu tham chiếu đến MainForm
+            // Set the MainForm property of FormManager to this instance
             FormManager.MainForm = this;
-            // Đăng ký sự kiện khi người dùng đăng nhập/đăng xuất
+            // Update the navbar to show the correct details
             UpdateNavbar();
-            // Hiển thị trang chủ mặc định
+            // Show the home panel by default
             ShowPanel(homePanel);
             //this.MaximizeBox = false;
+            this.SizeChanged += new System.EventHandler(this.MainForm_SizeChanged);
+            MainForm_SizeChanged(this, EventArgs.Empty); // Initial call to set positions
         }
 
         private void InitializeComponent()
@@ -78,14 +80,14 @@ namespace LibraryManagementSystem
             this.navbarPanel.BackColor = System.Drawing.Color.White;
             this.navbarPanel.BorderStyle = BorderStyle.None;
             this.navbarPanel.Padding = new Padding(10);
-            // Thêm đường viền dưới cho navbar
+            // Border bottom
             this.navbarPanel.Paint += (sender, e) => {
-                var panel = sender as Panel;
-                var pen = new Pen(Color.FromArgb(229, 231, 235), 1);
+                Panel panel = sender as Panel;
+                Pen pen = new Pen(Color.FromArgb(229, 231, 235), 1);
                 e.Graphics.DrawLine(pen, 0, panel.Height - 1, panel.Width, panel.Height - 1);
             };
 
-            // Thêm logo vào thanh điều hướng
+            // Add logo
             PictureBox picLogo = new PictureBox();
             picLogo.Size = new Size(40, 40);
             picLogo.Location = new Point(20, 15);
@@ -94,7 +96,7 @@ namespace LibraryManagementSystem
             picLogo.SizeMode = PictureBoxSizeMode.Zoom;
             this.navbarPanel.Controls.Add(picLogo);
 
-            // Thêm text logo
+            // Add logo text
             Label lblLogo = new Label();
             lblLogo.Text = "Thư Viện";
             lblLogo.Font = new Font("Segoe UI", 16, FontStyle.Bold);
@@ -117,7 +119,7 @@ namespace LibraryManagementSystem
             this.picLogo.Size = new Size(40, 40);
             this.picLogo.Location = new Point(20, 15);
             this.picLogo.BackColor = Color.Transparent;
-            this.picLogo.Image = null; // Set your logo image here
+            //this.picLogo.Image = null; //Set Logo image
             this.picLogo.SizeMode = PictureBoxSizeMode.Zoom;
 
             // Logo text
@@ -135,7 +137,6 @@ namespace LibraryManagementSystem
             this.contentPanel.Padding = new Padding(20);
             this.contentPanel.AutoScroll = true;
 
-            // Cập nhật các nút trên thanh điều hướng với kiểu dáng mới
             // btnHome
             this.btnHome.Text = "Trang chủ";
             this.btnHome.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -156,6 +157,7 @@ namespace LibraryManagementSystem
             this.btnBooks.Location = new System.Drawing.Point(310, 15);
             this.btnBooks.Size = new System.Drawing.Size(110, 40);
             this.btnBooks.Cursor = Cursors.Hand;
+            this.btnBooks.Dock = DockStyle.None;
             this.btnBooks.Click += new System.EventHandler(this.btnBooks_Click);
 
             // btnSearch
@@ -185,7 +187,8 @@ namespace LibraryManagementSystem
             this.lblUserName.Font = new Font("Segoe UI", 10, FontStyle.Bold);
             this.lblUserName.ForeColor = System.Drawing.Color.FromArgb(37, 99, 235);
             this.lblUserName.Location = new System.Drawing.Point(650, 15);
-            this.lblUserName.Size = new System.Drawing.Size(120, 40);
+            this.lblUserName.Size = new System.Drawing.Size(180, 40);
+            this.lblUserName.Dock = DockStyle.None;
             this.lblUserName.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 
             // btnLogin
@@ -194,7 +197,6 @@ namespace LibraryManagementSystem
             this.btnLogin.Font = new Font("Segoe UI", 10, FontStyle.Bold);
             this.btnLogin.BackColor = System.Drawing.Color.FromArgb(37, 99, 235);
             this.btnLogin.ForeColor = System.Drawing.Color.White;
-            this.btnLogin.Location = new System.Drawing.Point(780, 15);
             this.btnLogin.Size = new System.Drawing.Size(100, 40);
             this.btnLogin.Cursor = Cursors.Hand;
             this.btnLogin.Click += new System.EventHandler(this.btnLogin_Click);
@@ -205,9 +207,10 @@ namespace LibraryManagementSystem
             this.btnProfile.FlatAppearance.BorderSize = 0;
             this.btnProfile.Font = new Font("Segoe UI", 10, FontStyle.Bold);
             this.btnProfile.ForeColor = System.Drawing.Color.FromArgb(37, 99, 235);
-            this.btnProfile.Location = new System.Drawing.Point(780, 15);
+            this.btnProfile.Location = new System.Drawing.Point(800, 15);
             this.btnProfile.Size = new System.Drawing.Size(100, 40);
             this.btnProfile.Cursor = Cursors.Hand;
+            this.btnProfile.Dock = DockStyle.Right;
             this.btnProfile.Click += new System.EventHandler(this.btnProfile_Click);
 
             // btnLogout
@@ -219,6 +222,7 @@ namespace LibraryManagementSystem
             this.btnLogout.Location = new System.Drawing.Point(880, 15);
             this.btnLogout.Size = new System.Drawing.Size(100, 40);
             this.btnLogout.Cursor = Cursors.Hand;
+            this.btnLogout.Dock = DockStyle.Right;
             this.btnLogout.Click += new System.EventHandler(this.btnLogout_Click);
 
             // MainForm
@@ -232,16 +236,65 @@ namespace LibraryManagementSystem
             this.ResumeLayout(false);
         }
 
+        private void MainForm_SizeChanged(object sender, EventArgs e)
+        {
+            int margin = 15;
+            int buttonHeight = 40;
+            int spacing = 10;
+
+            // Calculate the available width for buttons
+            int availableWidth = this.ClientSize.Width - margin * 2 - spacing * 6; // 6 spaces between 7 buttons
+
+            // Calculate the new button width
+            int buttonWidth = availableWidth / 9; // 7 buttons
+
+            // Calculate the starting X position for the buttons
+            int startX = margin + 180;
+
+            // Update button positions and widths
+            this.btnHome.Location = new Point(startX, margin);
+            this.btnHome.Size = new Size(buttonWidth, buttonHeight);
+
+            this.btnBooks.Location = new Point(startX + buttonWidth + spacing, margin);
+            this.btnBooks.Size = new Size(buttonWidth, buttonHeight);
+
+            this.btnSearch.Location = new Point(startX + 2 * (buttonWidth + spacing), margin);
+            this.btnSearch.Size = new Size(buttonWidth, buttonHeight);
+
+            this.btnMyBooks.Location = new Point(startX + 3 * (buttonWidth + spacing), margin);
+            this.btnMyBooks.Size = new Size(buttonWidth, buttonHeight);
+
+            this.lblUserName.Location = new Point(startX + 4 * (buttonWidth + spacing) , margin);
+            this.lblUserName.Size = new Size(buttonWidth + 15, buttonHeight);
+
+            // Conditional display of btnLogin and btnProfile
+            if (this.lblUserName.Text == "")
+            {
+                this.btnLogin.Location = new Point(startX + 6 * (buttonWidth + spacing) , margin);
+                this.btnLogin.Size = new Size(buttonWidth, buttonHeight);
+                this.btnProfile.Visible = false;
+            }
+            else
+            {
+                this.btnProfile.Location = new Point(startX + 5 * (buttonWidth + spacing) + 80, margin);
+                this.btnProfile.Size = new Size(buttonWidth, buttonHeight);
+                this.btnLogin.Visible = false;
+            }
+
+            this.btnLogout.Location = new Point(startX + 6 * (buttonWidth + spacing), margin);
+            this.btnLogout.Size = new Size(buttonWidth, buttonHeight);
+        }
+
         private void InitializePanels()
         {
-            // Khởi tạo các panel
+            // Load all panels
             homePanel = new HomePanel();
             booksPanel = new BooksPanel();
             searchPanel = new SearchPanel();
             myBooksPanel = new MyBooksPanel();
             profilePanel = new ProfilePanel();
 
-            // Thiết lập kích thước và vị trí
+            // Set the Dock property to fill the panel
             homePanel.Dock = DockStyle.Fill;
             booksPanel.Dock = DockStyle.Fill;
             searchPanel.Dock = DockStyle.Fill;
@@ -264,7 +317,7 @@ namespace LibraryManagementSystem
                 string[] nameParts = Library.Instance.CurrentUser.Name.Split(' ');
                 string firstName = nameParts[nameParts.Length - 1];
                 lblUserName.Text = $"Xin chào, {firstName}";
-                // Hiển thị thông tin người dùng trong phần Hồ sơ
+                // Show profile panel if user is logged in
                 profilePanel.UpdateProfileInfo();
             }
         }
@@ -316,14 +369,14 @@ namespace LibraryManagementSystem
 
         private void btnLogout_Click(object sender, EventArgs e)
         {
-            // Cập nhật trạng thái sách trước khi đăng xuất
+            // Update the book status
             Library.Instance.ResetBookStatus();
 
-            // Đặt người dùng hiện tại thành null
+            // Set the current user to null
             Library.Instance.CurrentUser = null;
             Library.Instance.SaveData();
 
-            // Cập nhật giao diện
+            // Update the navbar and all panels
             UpdateNavbar();
             UpdateAllPanels();
             ShowPanel(homePanel);
@@ -342,23 +395,23 @@ namespace LibraryManagementSystem
             {
                 UpdateNavbar();
                 UpdateAllPanels();
-                // Hiển thị thông tin người dùng trong phần Hồ sơ
+                // Show the MyBooksPanel if the user is logged in
                 profilePanel.UpdateProfileInfo();
             }
         }
 
-        // Thêm phương thức UpdateAllPanels để cập nhật tất cả các panel
+        // Add a public method to update all panels
         public void UpdateAllPanels()
         {
             this.SuspendLayout();
 
-            // Cập nhật danh sách sách
+            // Load Books
             booksPanel.LoadBooks();
 
-            // Cập nhật danh sách sách phổ biến
+            // Load Popular Books
             homePanel.LoadPopularBooks();
 
-            // Cập nhật danh sách sách đã mượn nếu người dùng đã đăng nhập
+            // Load Borrowed Books
             if (Library.Instance.CurrentUser != null)
             {
                 myBooksPanel.LoadBorrowedBooks();

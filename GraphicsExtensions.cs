@@ -6,31 +6,31 @@ namespace LibraryManagementSystem
 {
     public static class GraphicsExtensions
     {
-        // Phương thức từ EnhancedBookCard.cs
+        // Method from EnhancedBookCard.cs
         public static void AddRoundedRectangle(this GraphicsPath path, Rectangle rect, int radius)
         {
             int diameter = radius * 2;
             Rectangle arcRect = new Rectangle(rect.Location, new Size(diameter, diameter));
 
-            // Góc trên bên trái
+            // Upper left arc
             path.AddArc(arcRect, 180, 90);
 
-            // Góc trên bên phải
+            // Upper right arc
             arcRect.X = rect.Right - diameter;
             path.AddArc(arcRect, 270, 90);
 
-            // Góc dưới bên phải
+            // Lower right arc
             arcRect.Y = rect.Bottom - diameter;
             path.AddArc(arcRect, 0, 90);
 
-            // Góc dưới bên trái
+            // Lower left arc
             arcRect.X = rect.Left;
             path.AddArc(arcRect, 90, 90);
 
             path.CloseFigure();
         }
 
-        // Phương thức từ EnhancedBookCard.cs
+        // Method from EnhancedBookCard.cs
         public static void FillRoundedRectangle(this Graphics graphics, Brush brush, Rectangle rect, int radius)
         {
             using (GraphicsPath path = new GraphicsPath())
@@ -40,7 +40,7 @@ namespace LibraryManagementSystem
             }
         }
 
-        // Phương thức từ EnhancedBookCard.cs
+        // Method from EnhancedBookCard.cs
         public static void DrawRoundedRectangle(this Graphics graphics, Pen pen, Rectangle rect, int radius)
         {
             using (GraphicsPath path = new GraphicsPath())
@@ -50,28 +50,28 @@ namespace LibraryManagementSystem
             }
         }
 
-        // Phương thức từ SearchResultCard.cs - giữ lại để tương thích
+        // Method from EnhancedBorrowedBookCard.cs
         public static void FillRoundedRectangleCompat(this Graphics graphics, Brush brush, Rectangle rect, int cornerRadius)
         {
-            using (var path = CreateRoundedRectanglePath(rect, cornerRadius))
+            using (GraphicsPath path = CreateRoundedRectanglePath(rect, cornerRadius))
             {
                 graphics.FillPath(brush, path);
             }
         }
 
-        // Phương thức từ SearchResultCard.cs - giữ lại để tương thích
+        // Method from EnhancedBorrowedBookCard.cs
         public static void DrawRoundedRectangleCompat(this Graphics graphics, Pen pen, Rectangle rect, int cornerRadius)
         {
-            using (var path = CreateRoundedRectanglePath(rect, cornerRadius))
+            using (GraphicsPath path = CreateRoundedRectanglePath(rect, cornerRadius))
             {
                 graphics.DrawPath(pen, path);
             }
         }
 
-        // Phương thức từ SearchResultCard.cs - giữ lại để tương thích
+        // Method from EnhancedBorrowedBookCard.cs
         private static GraphicsPath CreateRoundedRectanglePath(Rectangle rect, int cornerRadius)
         {
-            var path = new GraphicsPath();
+            GraphicsPath path = new GraphicsPath();
 
             path.AddArc(rect.X, rect.Y, cornerRadius * 2, cornerRadius * 2, 180, 90);
             path.AddArc(rect.Right - cornerRadius * 2, rect.Y, cornerRadius * 2, cornerRadius * 2, 270, 90);

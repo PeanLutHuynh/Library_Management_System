@@ -19,6 +19,16 @@ namespace LibraryManagementSystem
         {
             this.book = book;
             InitializeComponent();
+            this.Resize += SearchResultCard_Resize;
+        }
+
+        private void SearchResultCard_Resize(object sender, EventArgs e)
+        {
+            // Update the position of the button when the form is resized
+            if (btnDetails != null)
+            {
+                btnDetails.Location = new Point(this.ClientSize.Width - 130, 15);
+            }
         }
 
         private void InitializeComponent()
@@ -38,7 +48,8 @@ namespace LibraryManagementSystem
             this.Margin = new Padding(15);
             this.BackColor = Color.White;
             this.Padding = new Padding(15);
-            this.Anchor = AnchorStyles.Right|AnchorStyles.Top;
+            this.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            this.Height = 160; // Chiều cao cố định
 
             // picCover
             this.picCover.Size = new Size(110, 130);
@@ -47,8 +58,8 @@ namespace LibraryManagementSystem
             this.picCover.SizeMode = PictureBoxSizeMode.Zoom;
             // Bo góc cho hình ảnh
             this.picCover.Paint += (sender, e) => {
-                var pic = sender as PictureBox;
-                var path = new System.Drawing.Drawing2D.GraphicsPath();
+                PictureBox pic = sender as PictureBox;
+                System.Drawing.Drawing2D.GraphicsPath path = new System.Drawing.Drawing2D.GraphicsPath();
                 path.AddArc(0, 0, 15, 15, 180, 90);
                 path.AddArc(pic.Width - 15, 0, 15, 15, 270, 90);
                 path.AddArc(pic.Width - 15, pic.Height - 15, 15, 15, 0, 90);
@@ -56,7 +67,7 @@ namespace LibraryManagementSystem
                 pic.Region = new Region(path);
             };
 
-            // Tải ảnh bìa sách sử dụng ResourceManager
+            // TLoad cover image
             Image coverImage = ResourceManager.LoadBookCoverById(book.Id);
             if (coverImage != null)
             {
@@ -111,9 +122,9 @@ namespace LibraryManagementSystem
             this.btnDetails.BackColor = Color.FromArgb(37, 99, 235);
             this.btnDetails.ForeColor = Color.White;
             this.btnDetails.Cursor = Cursors.Hand;
+            this.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            this.btnDetails.Location = new Point(this.ClientSize.Width - 130, 15);
             this.btnDetails.Click += new EventHandler(this.btnDetails_Click);
-            this.btnDetails.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            this.btnDetails.Location = new Point(this.Width - 130, 15);
 
             // Add controls
             this.Controls.Add(this.picCover);

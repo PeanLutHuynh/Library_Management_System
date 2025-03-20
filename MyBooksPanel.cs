@@ -14,6 +14,28 @@ namespace LibraryManagementSystem
         public MyBooksPanel()
         {
             InitializeComponent();
+            this.Resize += MyBooksPanel_Resize;
+        }
+
+        private void MyBooksPanel_Resize(object sender, EventArgs e)
+        {
+            // Update the size of borrowedBooksPanel
+            UpdateBorrowedBooksPanelSize();
+        }
+
+        private void UpdateBorrowedBooksPanelSize()
+        {
+            // Update the size of borrowedBooksPanel
+            this.borrowedBooksPanel.Size = new Size(this.ClientSize.Width - 40, this.ClientSize.Height - 110);
+
+            // If there are EnhancedBorrowedBookCard controls in the panel, update their width
+            foreach (Control control in borrowedBooksPanel.Controls)
+            {
+                if (control is EnhancedBorrowedBookCard)
+                {
+                    control.Width = borrowedBooksPanel.ClientSize.Width - 40;
+                }
+            }
         }
 
         private void InitializeComponent()
@@ -41,6 +63,9 @@ namespace LibraryManagementSystem
             this.borrowedBooksPanel.AutoScroll = true;
             this.borrowedBooksPanel.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             this.borrowedBooksPanel.Padding = new Padding(0, 0, 20, 0); // Add right padding for scrollbar
+            this.borrowedBooksPanel.FlowDirection = FlowDirection.TopDown;
+            this.borrowedBooksPanel.WrapContents = false;
+            this.borrowedBooksPanel.AutoSize = false;
 
             // MyBooksPanel
             this.Controls.Add(this.lblTitle);
@@ -69,9 +94,16 @@ namespace LibraryManagementSystem
                 foreach (Book book in borrowedBooks)
                 {
                     EnhancedBorrowedBookCard bookCard = new EnhancedBorrowedBookCard(book);
+                    bookCard.Width = borrowedBooksPanel.ClientSize.Width - 40;
                     borrowedBooksPanel.Controls.Add(bookCard);
                 }
             }
+        }
+
+        protected override void OnResize(EventArgs e)
+        {
+            base.OnResize(e);
+            UpdateBorrowedBooksPanelSize();
         }
     }
 }

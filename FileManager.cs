@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text.Json;
 using System.Windows.Forms;
 
@@ -36,7 +35,7 @@ namespace LibraryManagementSystem
         {
             try
             {
-                // Tạo một bản sao của thư viện để tránh lưu đường dẫn tuyệt đối
+                // Create a temporary class to serialize data
                 LibraryData libraryData = new LibraryData
                 {
                     Books = library.Books,
@@ -44,10 +43,10 @@ namespace LibraryManagementSystem
                     CurrentUser = library.CurrentUser
                 };
 
-                // Xóa đường dẫn ảnh tuyệt đối trước khi lưu
+                // Delete the cover image path to save only the file name
                 foreach (Book book in libraryData.Books)
                 {
-                    // Lưu chỉ tên file thay vì đường dẫn đầy đủ
+                    // Save only the file name of the cover image
                     if (!string.IsNullOrEmpty(book.CoverImage))
                     {
                         book.CoverImage = Path.GetFileName(book.CoverImage);
@@ -71,7 +70,7 @@ namespace LibraryManagementSystem
             {
                 string jsonString = File.ReadAllText(filePath);
 
-                // Tạo một lớp tạm để deserialize dữ liệu
+                // Create a temporary class to deserialize data
                 LibraryData libraryData = JsonSerializer.Deserialize<LibraryData>(jsonString, new JsonSerializerOptions
                 {
                     PropertyNameCaseInsensitive = true
@@ -79,23 +78,23 @@ namespace LibraryManagementSystem
 
                 if (libraryData != null)
                 {
-                    // Cập nhật dữ liệu vào instance hiện tại
+                    // Update the cover image path to the full path
                     Library.Instance.Books = libraryData.Books;
                     Library.Instance.Users = libraryData.Users;
 
-                    // Đặt lại trạng thái của tất cả sách thành true trước
+                    // Reset the availability of all books
                     foreach (Book book in libraryData.Books)
                     {
                         book.Available = true;
                         book.DueDate = null;
                     }
 
-                    // Khôi phục mối quan hệ giữa Book trong BorrowHistory và Book trong danh sách Books
+                    // Restore borrowed books for the current user
                     if (libraryData.CurrentUser != null)
                     {
-                        // Tìm user có trong danh sách Users thay vì sử dụng trực tiếp CurrentUser từ JSON
+                        // Find the saved user in the current list of users
                         User savedUser = null;
-                        foreach (var user in Library.Instance.Users)
+                        foreach (User user in Library.Instance.Users)
                         {
                             if (user.Email == libraryData.CurrentUser.Email)
                             {
@@ -107,13 +106,13 @@ namespace LibraryManagementSystem
                         if (savedUser != null)
                         {
                             Library.Instance.CurrentUser = savedUser;
-                            savedUser.RestoreBorrowedBooks(); // GỌI HÀM Ở ĐÂY
+                            savedUser.RestoreBorrowedBooks();
                         }
                     }
                 }
 
-                // Tải ảnh bìa sách cho tất cả sách
-                foreach (var book in Library.Instance.Books)
+                // Load cover images
+                foreach (Book book in Library.Instance.Books)
                 {
                     book.LoadCoverImage();
                 }
@@ -127,7 +126,7 @@ namespace LibraryManagementSystem
             return Library.Instance;
         }
 
-        // Lớp tạm để deserialize dữ liệu
+        // Temporary class to serialize/deserialize library data
         [Serializable]
         public class LibraryData
         {

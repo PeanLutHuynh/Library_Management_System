@@ -16,7 +16,7 @@ namespace LibraryManagementSystem
         private string address;
         private string memberSince;
         private List<BorrowHistory> borrowHistory;
-        private List<BorrowHistory> currentlyBorrowedBooks; // Chỉ chứa sách đang mượn
+        private List<BorrowHistory> currentlyBorrowedBooks; // List of books that are currently borrowed
 
         // Properties
         public string Id
@@ -96,7 +96,7 @@ namespace LibraryManagementSystem
                 return "Sách này hiện không có sẵn để mượn.";
             }
 
-            // Tạo một bản ghi mượn sách mới
+            // Create a new BorrowHistory object
             BorrowHistory borrow = new BorrowHistory(
                 Guid.NewGuid().ToString(),
                 book,
@@ -106,20 +106,20 @@ namespace LibraryManagementSystem
                 null
             );
 
-            // Thêm vào lịch sử mượn sách của người dùng
+            // Add to borrow history
             borrowHistory.Add(borrow);
-            // Thêm vào danh sách sách đang mượn
+            // Add to currently borrowed books
             currentlyBorrowedBooks.Add(borrow);
 
-            // Cập nhật trạng thái sách
+            // Update book status
             book.Available = false;
             book.DueDate = returnDate;
             book.BorrowCount++;
 
-            // Thông báo sự thay đổi cho Library (Observer pattern)
+            // Notify Library of the change (Observer pattern)
             Library.Instance.NotifyBookChanged(book);
 
-            // Cập nhật giao diện
+            // Update UI
             if (MainForm.FormManager.MainForm != null)
             {
                 MainForm.FormManager.MainForm.Invoke((MethodInvoker)delegate
@@ -128,12 +128,11 @@ namespace LibraryManagementSystem
                 });
             }
 
-            // Lưu dữ liệu
+            // Save data
             Library.Instance.SaveData();
 
             string result = $"Đã mượn thành công: {book.Title}\n";
             //result += $"Ngày mượn: {borrowDate.ToString("dd/MM/yyyy")}, Hạn trả: {returnDate.ToString("dd/MM/yyyy")}";
-
             return result;
         }
 
@@ -149,16 +148,16 @@ namespace LibraryManagementSystem
                     if (actualBook != null)
                     {
                         borrow.Book = actualBook;
-                        actualBook.Available = false; // Đánh dấu sách đã được mượn
+                        actualBook.Available = false; // Mark the book as borrowed
 
-                        // Xử lý lỗi DateTime nếu dữ liệu không hợp lệ
+                        // Handle due date
                         if (DateTime.TryParseExact(borrow.DueDate, "dd/MM/yyyy", null, System.Globalization.DateTimeStyles.None, out DateTime dueDate))
                         {
                             actualBook.DueDate = dueDate;
                         }
                         else
                         {
-                            actualBook.DueDate = DateTime.Now.AddDays(7); // Mặc định hạn trả là 7 ngày
+                            actualBook.DueDate = DateTime.Now.AddDays(7); // Default due date is 7 days from now
                         }
 
                         CurrentlyBorrowedBooks.Add(borrow);
@@ -167,12 +166,11 @@ namespace LibraryManagementSystem
             }
         }
 
-
         // Method to return a book
         public string ReturnBook(Book book)
         {
             BorrowHistory borrow = null;
-            foreach (var b in BorrowHistory)
+            foreach (BorrowHistory b in BorrowHistory)
             {
                 if (b.Book.Id == book.Id && !b.Returned)
                 {
@@ -185,14 +183,14 @@ namespace LibraryManagementSystem
                 return "Không tìm thấy thông tin mượn cho sách này.";
             }
 
-            // Cập nhật thông tin trả sách
+            // Update borrow history
             borrow.ReturnDate = DateTime.Now.ToString("dd/MM/yyyy");
             borrow.Returned = true;
 
-            // Xóa khỏi danh sách sách đang mượn
+            // Remove from currently borrowed books
             currentlyBorrowedBooks.Remove(borrow);
 
-            // Cập nhật trạng thái của sách trong danh sách Books
+            // Update book status
             Book actualBook = Library.Instance.FindBook(book.Id);
             if (actualBook != null)
             {
@@ -200,17 +198,17 @@ namespace LibraryManagementSystem
                 actualBook.DueDate = null;
             }
 
-            // Xóa khỏi danh sách sách đang mượn
+            // Remove from currently borrowed books
             CurrentlyBorrowedBooks.Remove(borrow);
 
-            // Cập nhật trạng thái của sách trong BorrowHistory
+            // Update Book Status
             book.Available = true;
             book.DueDate = null;
 
-            // Thông báo sự thay đổi cho Library (Observer pattern)
+            // Notify Library of the change (Observer pattern)
             Library.Instance.NotifyBookChanged(book);
 
-            // Cập nhật giao diện
+            // Update UI
             if (MainForm.FormManager.MainForm != null)
             {
                 MainForm.FormManager.MainForm.Invoke((MethodInvoker)delegate
@@ -219,10 +217,10 @@ namespace LibraryManagementSystem
                 });
             }
 
-            // Lưu dữ liệu
+            // Save data
             Library.Instance.SaveData();
 
-            // Tính ngày hạn chót để trả sách (7 ngày từ hôm nay)
+            // Estimate physical return deadline
             DateTime physicalReturnDeadline = DateTime.Now.AddDays(7);
             string result = $"Đã xác nhận trả sách thành công: {book.Title}\n\n";
             result += $"Vui lòng mang sách đến thư viện trong vòng 7 ngày (trước ngày {physicalReturnDeadline.ToString("dd/MM/yyyy")}).";

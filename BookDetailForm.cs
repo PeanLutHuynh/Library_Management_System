@@ -14,6 +14,7 @@ namespace LibraryManagementSystem
         private Label lblPublisher;
         private Label lblYear;
         private Label lblPages;
+        private Label lblBorrowCount;
         private Label lblDescription;
         private Label lblStatus;
         private Button btnBorrow;
@@ -34,6 +35,7 @@ namespace LibraryManagementSystem
             this.lblPublisher = new Label();
             this.lblYear = new Label();
             this.lblPages = new Label();
+            this.lblBorrowCount = new Label();
             this.lblDescription = new Label();
             this.lblStatus = new Label();
             this.btnBorrow = new Button();
@@ -59,10 +61,10 @@ namespace LibraryManagementSystem
             this.picCover.Location = new Point(30, 30);
             this.picCover.BackColor = Color.FromArgb(243, 244, 246);
             this.picCover.SizeMode = PictureBoxSizeMode.Zoom;
-            // Bo góc cho hình ảnh
+            // Rounded corners for picCover
             this.picCover.Paint += (sender, e) => {
-                var pic = sender as PictureBox;
-                var path = new System.Drawing.Drawing2D.GraphicsPath();
+                PictureBox pic = sender as PictureBox;
+                System.Drawing.Drawing2D.GraphicsPath path = new System.Drawing.Drawing2D.GraphicsPath();
                 path.AddArc(0, 0, 20, 20, 180, 90);
                 path.AddArc(pic.Width - 20, 0, 20, 20, 270, 90);
                 path.AddArc(pic.Width - 20, pic.Height - 20, 20, 20, 0, 90);
@@ -70,7 +72,7 @@ namespace LibraryManagementSystem
                 pic.Region = new Region(path);
             };
 
-            // Tải ảnh bìa sách sử dụng ResourceManager
+            // Load Book Cover Through ResourceManager
             Image coverImage = ResourceManager.LoadBookCoverById(book.Id);
             if (coverImage != null)
             {
@@ -119,11 +121,18 @@ namespace LibraryManagementSystem
             this.lblPages.Size = new Size(490, 25);
             this.lblPages.ForeColor = Color.FromArgb(75, 85, 99);
 
+            // lblBorrowCount
+            this.lblBorrowCount.Text = "Lượt mượn: " + book.BorrowCount.ToString();
+            this.lblBorrowCount.Font = new Font("Segoe UI", 12);
+            this.lblBorrowCount.Location = new Point(280, 255);
+            this.lblBorrowCount.Size = new Size(490, 25);
+            this.lblBorrowCount.ForeColor = Color.FromArgb(75, 85, 99);
+
             // lblStatus
             this.lblStatus.Text = "Trạng thái: " + (book.Available ? "Có sẵn" : "Đã mượn");
             this.lblStatus.Font = new Font("Segoe UI", 12, FontStyle.Bold);
             this.lblStatus.ForeColor = book.Available ? Color.Green : Color.Red;
-            this.lblStatus.Location = new Point(280, 255);
+            this.lblStatus.Location = new Point(280, 290);
             this.lblStatus.Size = new Size(490, 25);
 
             // lblDescription
@@ -164,6 +173,7 @@ namespace LibraryManagementSystem
             this.Controls.Add(this.lblPublisher);
             this.Controls.Add(this.lblYear);
             this.Controls.Add(this.lblPages);
+            this.Controls.Add(this.lblBorrowCount);
             this.Controls.Add(this.lblStatus);
             this.Controls.Add(this.lblDescription);
             this.Controls.Add(this.btnBorrow);
@@ -186,12 +196,12 @@ namespace LibraryManagementSystem
             BorrowForm borrowForm = new BorrowForm(book);
             if (borrowForm.ShowDialog() == DialogResult.OK)
             {
-                // Cập nhật trạng thái sách
+                // Update Book Status
                 this.lblStatus.Text = "Trạng thái: Đã mượn";
                 this.lblStatus.ForeColor = Color.Red;
                 this.btnBorrow.Enabled = false;
 
-                // Đóng form chi tiết
+                // Close Detail Form
                 this.Close();
             }
         }
@@ -205,16 +215,16 @@ namespace LibraryManagementSystem
 
                 if (result == DialogResult.Yes)
                 {
-                    // Hiển thị form đăng nhập
+                    // Show login form
                     LoginForm loginForm = new LoginForm();
                     if (loginForm.ShowDialog() == DialogResult.OK)
                     {
-                        // Nếu đăng nhập thành công, tiếp tục mượn sách
+                        // If login successfully, continue to borrow book
                         return true;
                     }
                     else
                     {
-                        // Nếu không đăng nhập, đóng form mượn sách
+                        // If not login, close borrow form
                         this.DialogResult = DialogResult.Cancel;
                         this.Close();
                         return false;

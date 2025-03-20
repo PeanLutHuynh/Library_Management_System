@@ -93,17 +93,17 @@ namespace LibraryManagementSystem
             set { coverImage = value; }
         }
 
-        // Phương thức để tải ảnh bìa sách từ thư mục Resources/Images
+        // Method to load Book Cover in Resources/Images
         public void LoadCoverImage()
         {
             if (string.IsNullOrEmpty(this.coverImage))
             {
-                // Tìm ảnh trong thư mục Resources/Images
+                // Find Image in Resources/Images
                 string[] possibleExtensions = { ".jpg", ".png", ".jpeg", ".gif" };
 
                 foreach (string ext in possibleExtensions)
                 {
-                    // Đường dẫn tương đối từ thư mục thực thi
+                    // Relative path from the executable directory
                     string relativePath = Path.Combine("Resources", "Images", $"{this.id}{ext}");
                     string absolutePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, relativePath);
 
@@ -114,7 +114,7 @@ namespace LibraryManagementSystem
                     }
                 }
 
-                // Nếu không tìm thấy ảnh với ID, thử tìm ảnh mặc định
+                // If no image found, use default.jpg
                 string defaultImagePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", "Images", "default.jpg");
                 if (File.Exists(defaultImagePath))
                 {

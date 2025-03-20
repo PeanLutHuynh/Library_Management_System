@@ -18,6 +18,23 @@ namespace LibraryManagementSystem
         public SearchPanel()
         {
             InitializeComponent();
+            this.Resize += SearchPanel_Resize;
+        }
+
+        private void SearchPanel_Resize(object sender, EventArgs e)
+        {
+            // Ensure proper sizing of panels when form is resized
+            this.searchInputPanel.Width = this.ClientSize.Width - 40;
+            this.resultsPanel.Width = this.ClientSize.Width - 40;
+            this.resultsPanel.Height = this.ClientSize.Height - this.resultsPanel.Top - 20;
+            // Update the width of SearchResultCard controls
+            foreach (Control control in resultsPanel.Controls)
+            {
+                if (control is SearchResultCard)
+                {
+                    control.Width = resultsPanel.ClientSize.Width - 40; 
+                }
+            }
         }
 
         private void InitializeComponent()
@@ -37,9 +54,9 @@ namespace LibraryManagementSystem
 
             // lblTitle - Moved down and font size reduced
             this.lblTitle.Text = "Tìm kiếm sách";
-            this.lblTitle.Font = new Font("Arial", 20, FontStyle.Bold); // Reduced from 24 to 20
-            this.lblTitle.Size = new Size(400, 35); // Reduced height
-            this.lblTitle.Location = new Point(20, 55); // Moved down to Y=50
+            this.lblTitle.Font = new Font("Arial", 20, FontStyle.Bold); 
+            this.lblTitle.Size = new Size(400, 35); 
+            this.lblTitle.Location = new Point(20, 55); 
             this.lblTitle.Anchor = AnchorStyles.Top | AnchorStyles.Left;
 
             // lblSubtitle - Adjusted position
@@ -47,11 +64,11 @@ namespace LibraryManagementSystem
             this.lblSubtitle.Font = new Font("Arial", 10);
             this.lblSubtitle.ForeColor = Color.Gray;
             this.lblSubtitle.Size = new Size(400, 20);
-            this.lblSubtitle.Location = new Point(20, 95); // Adjusted below title
+            this.lblSubtitle.Location = new Point(20, 95); 
             this.lblSubtitle.Anchor = AnchorStyles.Top | AnchorStyles.Left;
 
             // Search Panel - Adjusted position
-            this.searchInputPanel.Location = new Point(20, 120); // Positioned below subtitle
+            this.searchInputPanel.Location = new Point(20, 120); 
             this.searchInputPanel.Size = new Size(860, 50);
             this.searchInputPanel.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
 
@@ -88,7 +105,7 @@ namespace LibraryManagementSystem
             this.searchInputPanel.Controls.Add(this.btnSearch);
 
             // resultsPanel - Positioned and sized to fill remaining space
-            this.resultsPanel.Location = new Point(20, 180); // Below search input
+            this.resultsPanel.Location = new Point(20, 180); 
             this.resultsPanel.Size = new Size(860, 430);
             this.resultsPanel.AutoScroll = true;
             this.resultsPanel.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
@@ -103,14 +120,6 @@ namespace LibraryManagementSystem
 
             // Add resize handler
             this.Resize += new EventHandler(this.SearchPanel_Resize);
-        }
-
-        private void SearchPanel_Resize(object sender, EventArgs e)
-        {
-            // Ensure proper sizing of panels when form is resized
-            this.searchInputPanel.Width = this.ClientSize.Width - 40; // 40 for left and right padding
-            this.resultsPanel.Width = this.ClientSize.Width - 40;
-            this.resultsPanel.Height = this.ClientSize.Height - this.resultsPanel.Top - 20; // 20 for bottom padding
         }
 
         private void txtSearch_KeyDown(object sender, KeyEventArgs e)
@@ -159,8 +168,8 @@ namespace LibraryManagementSystem
                 foreach (Book book in results)
                 {
                     SearchResultCard bookCard = new SearchResultCard(book);
-                    bookCard.Width = resultsPanel.Width - 40; // Adjust width to fit panel with margins
-                    bookCard.Margin = new Padding(10, 15, 10, 15); // Increased vertical margins
+                    bookCard.Width = resultsPanel.Width - 40; 
+                    bookCard.Margin = new Padding(10, 15, 10, 15); 
                     resultsPanel.Controls.Add(bookCard);
                 }
             }

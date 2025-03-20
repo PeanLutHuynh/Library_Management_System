@@ -90,10 +90,10 @@ namespace LibraryManagementSystem
             this.btnLogin.FlatAppearance.BorderSize = 0;
             this.btnLogin.Cursor = Cursors.Hand;
             this.btnLogin.Click += new EventHandler(this.btnLogin_Click);
-            // Bo góc cho nút đăng nhập
+            // Rounded corners for the button
             this.btnLogin.Paint += (sender, e) => {
-                var button = sender as Button;
-                var path = new System.Drawing.Drawing2D.GraphicsPath();
+                Button button = sender as Button;
+                System.Drawing.Drawing2D.GraphicsPath path = new System.Drawing.Drawing2D.GraphicsPath();
                 path.AddArc(0, 0, 20, 20, 180, 90);
                 path.AddArc(button.Width - 20, 0, 20, 20, 270, 90);
                 path.AddArc(button.Width - 20, button.Height - 20, 20, 20, 0, 90);
@@ -337,7 +337,7 @@ namespace LibraryManagementSystem
             string phone = txtPhone.Text.Trim();
             string address = txtAddress.Text.Trim();
 
-            // Kiểm tra dữ liệu nhập vào
+            // Check if any field is empty
             if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(email) ||
                 string.IsNullOrEmpty(password) || string.IsNullOrEmpty(confirmPassword) ||
                 string.IsNullOrEmpty(phone) || string.IsNullOrEmpty(address))
@@ -352,14 +352,14 @@ namespace LibraryManagementSystem
                 return;
             }
 
-            // Kiểm tra email đã tồn tại chưa
+            // Check if email is already registered
             if (Library.Instance.IsEmailRegistered(email))
             {
                 MessageBox.Show("Email này đã được đăng ký. Vui lòng sử dụng email khác.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            // Tạo người dùng mới
+            // Create new user
             User newUser = new User(Guid.NewGuid().ToString(), name, email, password, phone, address);
             Library.Instance.AddUser(newUser);
             Library.Instance.CurrentUser = newUser;

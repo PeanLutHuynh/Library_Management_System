@@ -7,11 +7,11 @@ namespace LibraryManagementSystem
 {
     public static class ResourceManager
     {
-        // Thư mục chứa tài nguyên
+        // Resources folder path
         private static readonly string ResourcesFolder = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources");
         private static readonly string ImagesFolder = Path.Combine(ResourcesFolder, "Images");
 
-        // Phương thức tải ảnh từ thư mục Resources/Images
+        // Method to load an image from file
         public static Image LoadImage(string imageName)
         {
             try
@@ -20,13 +20,13 @@ namespace LibraryManagementSystem
 
                 if (File.Exists(imagePath))
                 {
-                    using (var stream = new FileStream(imagePath, FileMode.Open, FileAccess.Read))
+                    using (FileStream stream = new FileStream(imagePath, FileMode.Open, FileAccess.Read))
                     {
                         return Image.FromStream(stream);
                     }
                 }
 
-                // Nếu không tìm thấy ảnh, trả về null
+                // If the image does not exist, return null
                 return null;
             }
             catch (Exception ex)
@@ -36,10 +36,10 @@ namespace LibraryManagementSystem
             }
         }
 
-        // Phương thức tải ảnh bìa sách theo ID
+        // MEthod to load book cover by book ID
         public static Image LoadBookCoverById(string bookId)
         {
-            // Thử tải ảnh với các định dạng phổ biến
+            // Try to load the image with possible extensions
             string[] extensions = { ".jpg", ".png", ".jpeg", ".gif" };
 
             foreach (string ext in extensions)
@@ -50,12 +50,11 @@ namespace LibraryManagementSystem
                     return img;
                 }
             }
-
-            // Nếu không tìm thấy, trả về ảnh mặc định
+            // If no image found, return default.jpg
             return LoadImage("default.jpg");
         }
 
-        // Kiểm tra xem thư mục Resources/Images có tồn tại không
+        // Check and create resource directories
         public static bool EnsureResourceDirectories()
         {
             try

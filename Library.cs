@@ -62,7 +62,7 @@ namespace LibraryManagementSystem
         // Method to initialize the library with sample data
         public void Initialize()
         {
-            // Tải dữ liệu từ file nếu có
+            // Load data from file if it exists
             if (System.IO.File.Exists("library.json"))
             {
                 Library loadedLibrary = FileManager.Instance.DeserializeLibrary("library.json");
@@ -75,7 +75,7 @@ namespace LibraryManagementSystem
             }
             else
             {
-                // Thêm một số dữ liệu mẫu
+                // Add sample books
                 AddBook(new Book("1", "Đắc Nhân Tâm", "Dale Carnegie", 1936, "Tâm lý - Kỹ năng sống", "NXB Tổng hợp TP.HCM", 320,
                     "Đắc nhân tâm (How to Win Friends and Influence People) là một quyển sách nhằm tự giúp bản thân (self-help) bán chạy nhất từ trước đến nay. Tác phẩm đã được chuyển ngữ sang hầu hết các thứ tiếng trên thế giới và có mặt ở hàng trăm quốc gia.", 42));
 
@@ -100,7 +100,7 @@ namespace LibraryManagementSystem
                 AddBook(new Book("8", "Hành Trình Về Phương Đông", "Baird T. Spalding", 1924, "Tâm linh", "NXB Hồng Đức", 256,
                     "Hành Trình Về Phương Đông kể về những trải nghiệm của một đoàn khoa học gồm các chuyên gia hàng đầu của Hội Khoa Học Hoàng Gia Anh được cử sang Ấn Độ và Tây Tạng để tìm hiểu về những khả năng siêu nhiên của con người.", 20));
 
-                // Thêm người dùng mẫu
+                // Add sample users
                 AddUser(new User("1", "Nguyễn Văn A", "12345678@gmail.com", "12345678", "0123456789", "Hà Nội, Việt Nam"));
             }
         }
@@ -161,15 +161,15 @@ namespace LibraryManagementSystem
 
         public bool IsEmailRegistered(string email)
         {
-            // Duyệt danh sách người dùng và kiểm tra email
+            // Search for the email in the list of users
             foreach (User user in Users)
             {
                 if (user.Email.Equals(email, StringComparison.OrdinalIgnoreCase))
                 {
-                    return true; // Email đã tồn tại
+                    return true; 
                 }
             }
-            return false; // Email chưa được đăng ký
+            return false; 
         }
 
         // Method to find a user

@@ -4,7 +4,6 @@ using System.Windows.Forms;
 
 namespace LibraryManagementSystem
 {
-    // Thẻ sách cải tiến với thiết kế giống giao diện web
     public class EnhancedBookCard : Panel
     {
         private Book book;
@@ -37,16 +36,16 @@ namespace LibraryManagementSystem
             this.BorderStyle = BorderStyle.None;
             this.Margin = new Padding(15);
             this.BackColor = Color.White;
-            // Thêm đổ bóng cho thẻ sách
+            // Add rounded corners to the panel (đổ bóng)
             this.Paint += (sender, e) => {
-                var panel = sender as Panel;
-                var rect = new Rectangle(0, 0, panel.Width, panel.Height);
-                using (var path = new System.Drawing.Drawing2D.GraphicsPath())
+                Panel panel = sender as Panel;
+                Rectangle rect = new Rectangle(0, 0, panel.Width, panel.Height);
+                using (System.Drawing.Drawing2D.GraphicsPath path = new System.Drawing.Drawing2D.GraphicsPath())
                 {
                     path.AddRoundedRectangle(rect, 10);
                     panel.Region = new Region(path);
                     // Vẽ viền
-                    using (var pen = new Pen(Color.FromArgb(229, 231, 235), 1))
+                    using (Pen pen = new Pen(Color.FromArgb(229, 231, 235), 1))
                     {
                         e.Graphics.DrawRoundedRectangle(pen, rect, 10);
                     }
@@ -62,10 +61,10 @@ namespace LibraryManagementSystem
             this.lblBorrowCount.Size = new Size(90, 24);
             this.lblBorrowCount.Location = new Point(10, 10);
             this.lblBorrowCount.TextAlign = ContentAlignment.MiddleCenter;
-            // Bo góc cho badge
+            // Rounded corners for the badge
             this.lblBorrowCount.Paint += (sender, e) => {
-                var label = sender as Label;
-                var path = new System.Drawing.Drawing2D.GraphicsPath();
+                Label label = sender as Label;
+                System.Drawing.Drawing2D.GraphicsPath path = new System.Drawing.Drawing2D.GraphicsPath();
                 path.AddArc(0, 0, 10, 10, 180, 90);
                 path.AddArc(label.Width - 10, 0, 10, 10, 270, 90);
                 path.AddArc(label.Width - 10, label.Height - 10, 10, 10, 0, 90);
@@ -78,10 +77,10 @@ namespace LibraryManagementSystem
             this.picCover.Location = new Point(10, 10);
             this.picCover.BackColor = Color.FromArgb(243, 244, 246);
             this.picCover.SizeMode = PictureBoxSizeMode.Zoom;
-            // Bo góc cho hình ảnh
+            // Rounded corners for the picture box
             this.picCover.Paint += (sender, e) => {
-                var pic = sender as PictureBox;
-                var path = new System.Drawing.Drawing2D.GraphicsPath();
+                PictureBox pic = sender as PictureBox;
+                System.Drawing.Drawing2D.GraphicsPath path = new System.Drawing.Drawing2D.GraphicsPath();
                 path.AddArc(0, 0, 15, 15, 180, 90);
                 path.AddArc(pic.Width - 15, 0, 15, 15, 270, 90);
                 path.AddArc(pic.Width - 15, pic.Height - 15, 15, 15, 0, 90);
@@ -89,7 +88,7 @@ namespace LibraryManagementSystem
                 pic.Region = new Region(path);
             };
 
-            // Tải ảnh bìa sách sử dụng ResourceManager
+            // Load Book Cover Through ResourceManager
             Image coverImage = ResourceManager.LoadBookCoverById(book.Id);
             if (coverImage != null)
             {
@@ -135,10 +134,10 @@ namespace LibraryManagementSystem
             this.btnDetails.ForeColor = Color.White;
             this.btnDetails.Cursor = Cursors.Hand;
             this.btnDetails.Click += new EventHandler(this.btnDetails_Click);
-            // Bo góc cho nút chi tiết
+            // Rounded corners for the button
             this.btnDetails.Paint += (sender, e) => {
-                var button = sender as Button;
-                var path = new System.Drawing.Drawing2D.GraphicsPath();
+                Button button = sender as Button;
+                System.Drawing.Drawing2D.GraphicsPath path = new System.Drawing.Drawing2D.GraphicsPath();
                 path.AddArc(0, 0, 15, 15, 180, 90);
                 path.AddArc(button.Width - 15, 0, 15, 15, 270, 90);
                 path.AddArc(button.Width - 15, button.Height - 15, 15, 15, 0, 90);

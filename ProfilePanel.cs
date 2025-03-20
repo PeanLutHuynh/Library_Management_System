@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.Windows.Forms;
 using System.Globalization;
+using System.Collections.Generic;
 
 namespace LibraryManagementSystem
 {
@@ -32,6 +33,17 @@ namespace LibraryManagementSystem
         public ProfilePanel()
         {
             InitializeComponent();
+            this.Resize += ProfilePanel_Resize;
+        }
+
+        private void ProfilePanel_Resize(object sender, EventArgs e)
+        {
+            // Ensure proper sizing of panels when form is resized
+            this.tabControl.Width = this.ClientSize.Width - 40; 
+            this.tabControl.Height = this.ClientSize.Height - this.tabControl.Top - 20; 
+
+            // Update the width of HistoryCard controls
+            UpdateHistoryCardLayout();
         }
 
         private void InitializeComponent()
@@ -188,6 +200,7 @@ namespace LibraryManagementSystem
             if (tabControl.SelectedTab == tabBorrowHistory)
             {
                 LoadBorrowHistory();
+                UpdateHistoryCardLayout();
             }
         }
 
@@ -210,7 +223,7 @@ namespace LibraryManagementSystem
 
             if (Library.Instance.CurrentUser != null && Library.Instance.CurrentUser.BorrowHistory != null)
             {
-                var history = Library.Instance.CurrentUser.BorrowHistory;
+                List<BorrowHistory> history = Library.Instance.CurrentUser.BorrowHistory;
 
                 if (history.Count == 0)
                 {
@@ -222,8 +235,9 @@ namespace LibraryManagementSystem
                 }
                 else
                 {
-                    // Sắp xếp lịch sử mượn sách theo thời gian mượn (mới nhất lên đầu)
-                    history.Sort((a, b) => {
+                    // Arrange history by BorrowDate in descending order
+                    history.Sort((a, b) =>
+                    {
                         try
                         {
                             DateTime dateA = DateTime.ParseExact(a.BorrowDate, "dd/MM/yyyy", CultureInfo.InvariantCulture);
@@ -241,6 +255,19 @@ namespace LibraryManagementSystem
                         HistoryCard historyCard = new HistoryCard(borrow);
                         historyPanel.Controls.Add(historyCard);
                     }
+                }
+            }
+        }
+
+        private void UpdateHistoryCardLayout()
+        {
+            foreach (Control control in historyPanel.Controls)
+            {
+                if (control is HistoryCard)
+                {
+                    control.Width = historyPanel.ClientSize.Width - 40; 
+                    HistoryCard historyCard = control as HistoryCard;
+                    historyCard.UpdateLayout();
                 }
             }
         }
@@ -267,7 +294,7 @@ namespace LibraryManagementSystem
         }
     }
 
-    // Card hiển thị lịch sử mượn sách
+    // HistoryCard class
     public class HistoryCard : Panel
     {
         private BorrowHistory borrowHistory;
@@ -361,6 +388,13 @@ namespace LibraryManagementSystem
             this.Controls.Add(this.lblDueDate);
             this.Controls.Add(this.lblStatus);
             this.Controls.Add(this.lblReturnDate);
+        }
+
+        public void UpdateLayout()
+        {
+            // Update the position of Status and ReturnDate labels
+            this.lblStatus.Location = new Point(this.Width - this.lblStatus.Width - 10, this.lblStatus.Location.Y);
+            this.lblReturnDate.Location = new Point(this.Width - this.lblReturnDate.Width - 10, this.lblReturnDate.Location.Y);
         }
     }
 }

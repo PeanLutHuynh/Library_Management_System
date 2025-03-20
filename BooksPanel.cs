@@ -40,7 +40,7 @@ namespace LibraryManagementSystem
             this.lblTitle.Text = "Danh sách sách";
             this.lblTitle.Font = new Font("Arial", 24, FontStyle.Bold);
             this.lblTitle.Size = new Size(400, 30);
-            this.lblTitle.Location = new Point(15, 50); // Adjusted Y from 20 to 30
+            this.lblTitle.Location = new Point(15, 50);
             this.lblTitle.Anchor = AnchorStyles.Top | AnchorStyles.Left;
 
             // lblSubtitle - Moved down and adjusted spacing
@@ -48,12 +48,12 @@ namespace LibraryManagementSystem
             this.lblSubtitle.Font = new Font("Arial", 10);
             this.lblSubtitle.ForeColor = Color.Gray;
             this.lblSubtitle.Size = new Size(400, 20);
-            this.lblSubtitle.Location = new Point(20, 90); // Adjusted Y from 60 to 75 (30+40+5)
+            this.lblSubtitle.Location = new Point(20, 90); 
             this.lblSubtitle.Anchor = AnchorStyles.Top | AnchorStyles.Left;
 
             // Filter section - Position adjusted to maintain proper spacing
             this.filterPanel.Size = new Size(860, 40);
-            this.filterPanel.Location = new Point(20, 105); // Adjusted from 90 to 105 (75+20+10)
+            this.filterPanel.Location = new Point(20, 105); 
             this.filterPanel.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
 
             // lblFilter
@@ -83,7 +83,7 @@ namespace LibraryManagementSystem
             this.filterPanel.Controls.Add(this.btnViewAll);
 
             // booksPanel - Position adjusted to account for new spacing
-            this.booksPanel.Location = new Point(20, 155); // Adjusted from 140 to 155 (105+40+10)
+            this.booksPanel.Location = new Point(20, 155); 
             this.booksPanel.Size = new Size(860, 440);
             this.booksPanel.AutoScroll = true;
             this.booksPanel.FlowDirection = FlowDirection.LeftToRight;
@@ -103,9 +103,9 @@ namespace LibraryManagementSystem
         private void BooksPanel_Resize(object sender, EventArgs e)
         {
             // Ensure proper sizing of panels when form is resized
-            this.filterPanel.Width = this.ClientSize.Width - 40; // 40 for left and right padding
+            this.filterPanel.Width = this.ClientSize.Width - 40; 
             this.booksPanel.Width = this.ClientSize.Width - 40;
-            this.booksPanel.Height = this.ClientSize.Height - this.booksPanel.Top - 20; // 20 for bottom padding
+            this.booksPanel.Height = this.ClientSize.Height - this.booksPanel.Top - 20; 
         }
 
         private void cmbGenreFilter_SelectedIndexChanged(object sender, EventArgs e)
