@@ -3,7 +3,7 @@
 namespace LibraryManagementSystem
 {
     [Serializable]
-    public class BorrowHistory
+    public class BorrowHistory : LibraryItem
     {
         // Fields
         private string id;
@@ -52,6 +52,7 @@ namespace LibraryManagementSystem
 
         // Constructor
         public BorrowHistory(string id, Book book, string borrowDate, string dueDate, bool returned, string returnDate)
+            : base(id, book.Title, book.Author, book.Year, book.Genre, book.Publisher, book.Pages, book.Description, book.BorrowCount)
         {
             this.id = id;
             this.book = book;
@@ -59,6 +60,16 @@ namespace LibraryManagementSystem
             this.dueDate = dueDate;
             this.returned = returned;
             this.returnDate = returnDate;
+        }
+
+        public override void DisplayInfo()
+        {
+            Console.WriteLine("Borrow History ID: " + Id);
+            Console.WriteLine("Book Title: " + Book.Title);
+            Console.WriteLine("Borrow Date: " + BorrowDate);
+            Console.WriteLine("Due Date: " + DueDate);
+            Console.WriteLine("Returned: " + Returned);
+            Console.WriteLine("Return Date: " + ReturnDate);
         }
     }
 }
