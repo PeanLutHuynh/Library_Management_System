@@ -34,10 +34,10 @@ The Library Management System is a C# application designed to manage books, memb
 ## Key Developers
 | Developer | Responsibilities |
 |-----------|------------------|
-| **Gia Lac** | Book & User Management |
-| **Quynh Huong** | Borrowing & Returning Modules |
-| **Duy Thai** | DateTime Tracking System, Book Search & Architecture |
-| **Minh Tuan** | Main Interface, data serialize and desiralize |
+| **Gia Lac** | Book class & Relevant class and UI |
+| **Quynh Huong** | Main interface and other form |
+| **Duy Thai** | Library class & Relevant class and UI|
+| **Minh Tuan** | User class & Relevant class and UI |
 
 ## General Requirements
 - WinForms UI with a simple menu
